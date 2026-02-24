@@ -176,28 +176,18 @@
     }
     .hero-ring {
       position: absolute;
-      width: 420px; height: 420px;
+      width: 540px; height: 660px;
       border-radius: 50%;
-      border: 1.5px dashed rgba(201,169,110,0.3);
-      animation: spinSlow 18s linear infinite;
-    }
-    .hero-ring::before {
-      content: '';
-      position: absolute;
-      width: 9px; height: 9px;
-      background: var(--accent);
-      border-radius: 50%;
-      top: 12px; left: 50%;
-      transform: translateX(-50%);
+      border: 1.5px solid rgba(201,169,110,0.2);
     }
     .hero-ring2 {
       position: absolute;
-      width: 360px; height: 360px;
+      width: 465px; height: 585px;
       border-radius: 50%;
-      border: 2px solid rgba(201,169,110,0.12);
+      border: 1px solid rgba(201,169,110,0.08);
     }
     .hero-avatar {
-      width: 300px; height: 300px;
+      width: 420px; height: 540px;
       border-radius: 50%;
       overflow: hidden;
       background: rgba(255,255,255,0.05);
@@ -211,10 +201,6 @@
       font-size: 6rem;
       color: rgba(255,255,255,0.12);
       user-select: none;
-    }
-    @keyframes spinSlow {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
     }
     @keyframes fadeIn {
       from { opacity: 0; }
@@ -265,7 +251,7 @@
     #skills .section-label { color: var(--accent); }
     .skills-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 1.5rem;
       max-width: 1100px;
     }
@@ -407,38 +393,111 @@
     /* ── CONTACT ── */
     #contact {
       background: var(--dark);
-      text-align: center;
       padding: 90px 5%;
     }
     #contact .section-title { color: #fff; }
     #contact .section-label { color: var(--accent); }
-    #contact .section-underline { margin: 0 auto 1.5rem; }
-    #contact p {
+    #contact .section-underline { margin-bottom: 1.5rem; }
+
+    .contact-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 5rem;
+      max-width: 1100px;
+      align-items: start;
+    }
+
+    .contact-intro {
       color: rgba(255,255,255,0.5);
-      max-width: 480px;
-      margin: 0 auto 2.5rem;
-      line-height: 1.7;
       font-size: 0.95rem;
+      line-height: 1.8;
+      margin-bottom: 2rem;
     }
-    .contact-links {
-      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+
+    .contact-details { display: flex; flex-direction: column; gap: 1.2rem; }
+    .contact-detail-item {
+      display: flex; align-items: flex-start; gap: 1rem;
     }
-    .contact-link {
-      display: flex; align-items: center; gap: 0.5rem;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: rgba(255,255,255,0.8);
-      padding: 12px 22px;
+    .contact-detail-icon {
+      width: 40px; height: 40px; flex-shrink: 0;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
       border-radius: 8px;
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 500;
-      transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent);
     }
-    .contact-link:hover {
+    .contact-detail-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 0.2rem;
+    }
+    .contact-detail-value {
+      color: rgba(255,255,255,0.75);
+      font-size: 0.9rem;
+    }
+    .contact-detail-link {
+      color: var(--accent);
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .contact-detail-link:hover { color: var(--accent2); }
+
+    /* form */
+    .contact-form-wrap {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px;
+      padding: 2.2rem;
+    }
+    .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+    }
+    .form-group input,
+    .form-group textarea {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 11px 14px;
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: none;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: rgba(255,255,255,0.2); }
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: rgba(201,169,110,0.5); }
+
+    .btn-submit {
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
       background: var(--accent);
-      border-color: var(--accent);
       color: var(--dark);
+      border: none;
+      padding: 13px 28px;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      align-self: flex-start;
+    }
+    .btn-submit:hover { background: var(--accent2); transform: translateY(-2px); }
+    .form-note {
+      font-size: 0.85rem;
+      min-height: 1.2em;
     }
 
     /* ── FOOTER ── */
@@ -465,9 +524,11 @@
       }
       .hero-cta-row { justify-content: center; }
       .hero-right { order: -1; }
-      .hero-avatar { width: 200px; height: 200px; }
-      .hero-ring { width: 270px; height: 270px; }
-      .hero-ring2 { width: 240px; height: 240px; }
+      .hero-avatar { width: 220px; height: 285px; }
+      .hero-ring { width: 280px; height: 360px; }
+      .hero-ring2 { width: 250px; height: 320px; }
+      .contact-wrapper { grid-template-columns: 1fr; gap: 2.5rem; }
+      .form-row { grid-template-columns: 1fr; }
       .about-grid { grid-template-columns: 1fr; gap: 2rem; }
       .projects-grid { grid-template-columns: 1fr; }
       .nav-links { display: none; }
@@ -506,7 +567,7 @@
           <a href="https://github.com/justinkyy" target="_blank" class="icon-btn" title="GitHub">
             <svg width="17" height="17" fill="currentColor" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
           </a>
-          <a href="mailto:your-email@example.com" class="icon-btn" title="Email">
+          <a href="/cdn-cgi/l/email-protection#9ae3f5efe8b7fff7fbf3f6daffe2fbf7eaf6ffb4f9f5f7" class="icon-btn" title="Email">
             <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
           </a>
         </div>
@@ -551,14 +612,34 @@
     <div class="section-underline"></div>
     <div class="skills-grid">
       <div class="skill-card">
-        <div class="skill-card-icon">🐍</div>
-        <h4>Python</h4>
-        <p>pandas, NumPy, Matplotlib, seaborn — data wrangling, EDA, and automation</p>
+        <div class="skill-card-icon">📋</div>
+        <h4>Excel</h4>
+        <p>Advanced formulas, pivot tables, Power Query, and dashboard reporting</p>
       </div>
       <div class="skill-card">
         <div class="skill-card-icon">🗄️</div>
         <h4>SQL</h4>
         <p>Complex queries, window functions, CTEs, data modeling across relational databases</p>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon">🔍</div>
+        <h4>Analysis</h4>
+        <p>EDA, KPI design, A/B testing, cohort analysis, and business storytelling</p>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon">🐍</div>
+        <h4>Python</h4>
+        <p>pandas, NumPy, Matplotlib, seaborn — data wrangling, EDA, and automation</p>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon">🤖</div>
+        <h4>Machine Learning</h4>
+        <p>scikit-learn, regression, classification, clustering, and model evaluation</p>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon">🎯</div>
+        <h4>Jira</h4>
+        <p>Agile project tracking, sprint planning, and cross-team collaboration workflows</p>
       </div>
       <div class="skill-card">
         <div class="skill-card-icon">📊</div>
@@ -571,14 +652,9 @@
         <p>Visual analytics, calculated fields, and publishing to Tableau Public/Server</p>
       </div>
       <div class="skill-card">
-        <div class="skill-card-icon">📋</div>
-        <h4>Excel</h4>
-        <p>Advanced formulas, pivot tables, Power Query, and dashboard reporting</p>
-      </div>
-      <div class="skill-card">
-        <div class="skill-card-icon">🔍</div>
-        <h4>Analysis</h4>
-        <p>EDA, KPI design, A/B testing, cohort analysis, and business storytelling</p>
+        <div class="skill-card-icon">🐳</div>
+        <h4>Docker</h4>
+        <p>Containerising data pipelines and apps for reproducible, portable environments</p>
       </div>
     </div>
   </section>
@@ -590,46 +666,47 @@
     <div class="section-underline"></div>
     <div class="projects-grid">
 
-      <!-- Project 1 -->
+      <!-- Project 1 : E-Commerce Sales Analysis -->
       <div class="project-card">
         <div class="project-thumb">
           <div class="project-thumb-placeholder">
-            <span>📊</span>
+            <span>🛒</span>
+            <p>In Progress</p>
+          </div>
+          <span class="project-tag">End-to-End Analysis</span>
+        </div>
+        <div class="project-body">
+          <h3>E-Commerce Sales Analysis</h3>
+          <p>An end-to-end analysis of the Brazilian Olist e-commerce dataset — covering sales performance, delivery logistics, and customer behaviour across 9 interconnected data tables. Built with Python for data cleaning, SQL for querying, and Tableau for interactive dashboards.</p>
+          <div class="project-tools">
+            <span class="tool-chip">Python</span>
+            <span class="tool-chip">SQL</span>
+            <span class="tool-chip">pandas</span>
+            <span class="tool-chip">Tableau</span>
+          </div>
+          <div class="project-btns">
+            <a href="https://github.com/justinkyy/olist-ecommerce-analysis" target="_blank" class="btn-primary">View on GitHub</a>
+            <span class="btn-outline" style="opacity:0.5; cursor:default;">Dashboard Coming Soon</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 2 : Freight Spend & Recovery -->
+      <div class="project-card">
+        <div class="project-thumb">
+          <div class="project-thumb-placeholder">
+            <span>🚚</span>
             <p>Add screenshot</p>
           </div>
           <span class="project-tag">Power BI</span>
         </div>
         <div class="project-body">
-          <h3>Project Title One</h3>
-          <p>Brief description of what this project analyzes, what data was used, and what key insight or outcome it produced. Keep it 2–3 sentences.</p>
+          <h3>Freight Spend & Recovery</h3>
+          <p>Developed a Power BI reporting solution to track freight expenditure and identify cost recovery opportunities across the supply chain. The analysis highlighted billing discrepancies and undercharged shipments, directly supporting finance and logistics teams in recovering costs. Data handled under confidentiality.</p>
           <div class="project-tools">
             <span class="tool-chip">Power BI</span>
+            <span class="tool-chip">DAX</span>
             <span class="tool-chip">SQL</span>
-            <span class="tool-chip">Excel</span>
-          </div>
-          <div class="project-btns">
-            <a href="https://github.com/justinkyy/project-repo-1" target="_blank" class="btn-primary">Documentation</a>
-            <a href="#" class="btn-outline">View Dashboard</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Project 2 -->
-      <div class="project-card">
-        <div class="project-thumb">
-          <div class="project-thumb-placeholder">
-            <span>📈</span>
-            <p>Add screenshot</p>
-          </div>
-          <span class="project-tag">Tableau</span>
-        </div>
-        <div class="project-body">
-          <h3>Project Title Two</h3>
-          <p>Brief description of what this project analyzes, what data was used, and what key insight or outcome it produced. Keep it 2–3 sentences.</p>
-          <div class="project-tools">
-            <span class="tool-chip">Tableau</span>
-            <span class="tool-chip">Python</span>
-            <span class="tool-chip">pandas</span>
           </div>
           <div class="project-btns">
             <a href="https://github.com/justinkyy/project-repo-2" target="_blank" class="btn-primary">Documentation</a>
@@ -638,21 +715,48 @@
         </div>
       </div>
 
-      <!-- Project 3 -->
+      <!-- Project 3 : Customer Transaction -->
       <div class="project-card">
         <div class="project-thumb">
           <div class="project-thumb-placeholder">
-            <span>🗄️</span>
+            <span>👥</span>
             <p>Add screenshot</p>
           </div>
-          <span class="project-tag">SQL</span>
+          <span class="project-tag">Segmentation</span>
         </div>
         <div class="project-body">
-          <h3>Project Title Three</h3>
-          <p>Brief description of what this project analyzes, what data was used, and what key insight or outcome it produced. Keep it 2–3 sentences.</p>
+          <h3>Customer Transaction Analysis</h3>
+          <p>Performed customer segmentation and cohort analysis on transactional data to uncover behavioural patterns, retention trends, and revenue contribution by segment. Insights were delivered through an interactive dashboard to support marketing and commercial decision-making. Data handled under confidentiality.</p>
           <div class="project-tools">
-            <span class="tool-chip">SQL</span>
             <span class="tool-chip">Python</span>
+            <span class="tool-chip">SQL</span>
+            <span class="tool-chip">pandas</span>
+            <span class="tool-chip">Tableau</span>
+          </div>
+          <div class="project-btns">
+            <a href="https://github.com/justinkyy/project-repo-1" target="_blank" class="btn-primary">Documentation</a>
+            <a href="#" class="btn-outline">View Notebook</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 4 : Product Recommendation -->
+      <div class="project-card">
+        <div class="project-thumb">
+          <div class="project-thumb-placeholder">
+            <span>🛍️</span>
+            <p>Add screenshot</p>
+          </div>
+          <span class="project-tag">Machine Learning</span>
+        </div>
+        <div class="project-body">
+          <h3>Product Recommendation Engine</h3>
+          <p>Built a collaborative filtering recommendation model to personalise product suggestions based on customer purchase history and behaviour. The system was designed to improve cross-sell opportunities and increase basket size. Methodology applied to internal data under confidentiality constraints.</p>
+          <div class="project-tools">
+            <span class="tool-chip">Python</span>
+            <span class="tool-chip">scikit-learn</span>
+            <span class="tool-chip">Collaborative Filtering</span>
+            <span class="tool-chip">pandas</span>
           </div>
           <div class="project-btns">
             <a href="https://github.com/justinkyy/project-repo-3" target="_blank" class="btn-primary">Documentation</a>
@@ -661,22 +765,23 @@
         </div>
       </div>
 
-      <!-- Project 4 -->
+      <!-- Project 5 : Inventory Forecasting -->
       <div class="project-card">
         <div class="project-thumb">
           <div class="project-thumb-placeholder">
-            <span>🐍</span>
+            <span>📦</span>
             <p>Add screenshot</p>
           </div>
-          <span class="project-tag">Python</span>
+          <span class="project-tag">Forecasting</span>
         </div>
         <div class="project-body">
-          <h3>Project Title Four</h3>
-          <p>Brief description of what this project analyzes, what data was used, and what key insight or outcome it produced. Keep it 2–3 sentences.</p>
+          <h3>Inventory Demand Forecasting</h3>
+          <p>Applied ARIMA/SARIMA time-series modelling to forecast demand for a single product SKU, enabling more accurate stock planning and reducing overstock risk. The model captured seasonality and trend components to generate reliable forward-looking predictions. Built on confidential inventory data.</p>
           <div class="project-tools">
             <span class="tool-chip">Python</span>
+            <span class="tool-chip">ARIMA / SARIMA</span>
+            <span class="tool-chip">statsmodels</span>
             <span class="tool-chip">pandas</span>
-            <span class="tool-chip">Matplotlib</span>
           </div>
           <div class="project-btns">
             <a href="https://github.com/justinkyy/project-repo-4" target="_blank" class="btn-primary">Documentation</a>
@@ -685,49 +790,27 @@
         </div>
       </div>
 
-      <!-- Project 5 -->
+      <!-- Project 6 : Face & Emotion Classification -->
       <div class="project-card">
         <div class="project-thumb">
           <div class="project-thumb-placeholder">
-            <span>📋</span>
-            <p>Add screenshot</p>
+            <span>🤖</span>
+            <p>Machine Learning</p>
           </div>
-          <span class="project-tag">Excel</span>
+          <span class="project-tag">Machine Learning</span>
         </div>
         <div class="project-body">
-          <h3>Project Title Five</h3>
-          <p>Brief description of what this project analyzes, what data was used, and what key insight or outcome it produced. Keep it 2–3 sentences.</p>
+          <h3>Face & Emotion Classification</h3>
+          <p>Built an image classification and recognition model to detect faces and identify emotional states, applying transfer learning with EfficientNet. The core methodology was then adapted for workplace use — classifying image categories in a professional content pipeline where direct materials could not be disclosed.</p>
           <div class="project-tools">
-            <span class="tool-chip">Excel</span>
-            <span class="tool-chip">Power Query</span>
+            <span class="tool-chip">Python</span>
+            <span class="tool-chip">EfficientNet</span>
+            <span class="tool-chip">Transfer Learning</span>
+            <span class="tool-chip">Computer Vision</span>
           </div>
           <div class="project-btns">
             <a href="https://github.com/justinkyy/project-repo-5" target="_blank" class="btn-primary">Documentation</a>
-            <a href="#" class="btn-outline">View File</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Project 6 -->
-      <div class="project-card">
-        <div class="project-thumb">
-          <div class="project-thumb-placeholder">
-            <span>📊</span>
-            <p>Add screenshot</p>
-          </div>
-          <span class="project-tag">Power BI</span>
-        </div>
-        <div class="project-body">
-          <h3>Project Title Six</h3>
-          <p>Brief description of what this project analyzes, what data was used, and what key insight or outcome it produced. Keep it 2–3 sentences.</p>
-          <div class="project-tools">
-            <span class="tool-chip">Power BI</span>
-            <span class="tool-chip">DAX</span>
-            <span class="tool-chip">SQL</span>
-          </div>
-          <div class="project-btns">
-            <a href="https://github.com/justinkyy/project-repo-6" target="_blank" class="btn-primary">Documentation</a>
-            <a href="#" class="btn-outline">View Dashboard</a>
+            <a href="#" class="btn-outline">View Notebook</a>
           </div>
         </div>
       </div>
@@ -737,18 +820,106 @@
 
   <!-- CONTACT -->
   <section id="contact">
-    <p class="section-label">Get In Touch</p>
-    <h2 class="section-title">Contact</h2>
-    <div class="section-underline"></div>
-    <p>I'm currently open to new data analyst roles. If you have an opportunity, a question, or just want to connect — feel free to reach out.</p>
-    <div class="contact-links">
-      <a href="/cdn-cgi/l/email-protection#0c7563797e2169616d65604c69746d617c6069226f6361" class="contact-link">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        <span class="__cf_email__" data-cfemail="8af3e5fff8a7efe7ebe3e6caeff2ebe7fae6efa4e9e5e7">[email&#160;protected]</span>
-      </a>
-      <a href="https://linkedin.com/in/your-linkedin" target="_blank" class="contact-link">
-        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-        LinkedIn
-      </a>
-      <a href="https://github.com/justinkyy" target="_blank" class="contact-link">
-        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.
+    <div class="contact-wrapper">
+
+      <!-- Left: info -->
+      <div class="contact-info">
+        <p class="section-label">Get In Touch</p>
+        <h2 class="section-title">Let's Connect</h2>
+        <div class="section-underline"></div>
+        <p class="contact-intro">I'd love to hear from you! Whether you have a role in mind, a project to discuss, or just want to say hello — my inbox is always open. I'll do my best to get back to you promptly.</p>
+
+        <div class="contact-details">
+          <div class="contact-detail-item">
+            <div class="contact-detail-icon">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <p class="contact-detail-label">Location</p>
+              <p class="contact-detail-value">Vancouver, BC — Open to Remote</p>
+            </div>
+          </div>
+          <div class="contact-detail-item">
+            <div class="contact-detail-icon">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+            </div>
+            <div>
+              <p class="contact-detail-label">LinkedIn</p>
+              <a href="https://linkedin.com/in/your-linkedin" target="_blank" class="contact-detail-link">linkedin.com/in/your-linkedin</a>
+            </div>
+          </div>
+          <div class="contact-detail-item">
+            <div class="contact-detail-icon">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            </div>
+            <div>
+              <p class="contact-detail-label">GitHub</p>
+              <a href="https://github.com/justinkyy" target="_blank" class="contact-detail-link">github.com/justinkyy</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: form -->
+      <div class="contact-form-wrap">
+        <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" class="contact-form" id="contactForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Your Name</label>
+              <input type="text" id="name" name="name" placeholder="e.g. Sarah Chen" required />
+            </div>
+            <div class="form-group">
+              <label for="email">Your Email</label>
+              <input type="email" id="email" name="email" placeholder="sarah@company.com" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" name="subject" placeholder="e.g. Data Analyst Opportunity" />
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" placeholder="Tell me a little about the role or what you have in mind..." required></textarea>
+          </div>
+          <button type="submit" class="btn-submit">
+            Send Message
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+          <p class="form-note" id="formStatus"></p>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 Justin K. &nbsp;·&nbsp; Vancouver, BC &nbsp;·&nbsp; Built with GitHub Pages</p>
+  </footer>
+
+  <script>
+    const form = document.getElementById('contactForm');
+    const status = document.getElementById('formStatus');
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = new FormData(form);
+        try {
+          const res = await fetch(form.action, { method: 'POST', body: data, headers: { 'Accept': 'application/json' } });
+          if (res.ok) {
+            status.textContent = "Thanks for reaching out! I'll get back to you soon.";
+            status.style.color = '#6ee7b7';
+            form.reset();
+          } else {
+            status.textContent = 'Oops — something went wrong. Please try again.';
+            status.style.color = '#fca5a5';
+          }
+        } catch {
+          status.textContent = 'Oops — something went wrong. Please try again.';
+          status.style.color = '#fca5a5';
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
