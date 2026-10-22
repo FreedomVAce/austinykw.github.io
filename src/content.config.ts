@@ -47,7 +47,7 @@ const projects = defineCollection({
       })
       .default({}),
     /** Interactive demo to embed on the case-study page; must be a key of DEMOS in src/pages/projects/[slug].astro. */
-    demo: z.enum(['inventory-forecast', 'freight-dashboard', 'recommender', 'segmentation', 'ecommerce']).optional(),
+    demo: z.enum(['inventory-forecast', 'freight-dashboard', 'recommender', 'segmentation', 'ecommerce', 'face-emotion']).optional(),
     /** Optional thumbnail path under public/, e.g. "images/projects/x.png". */
     thumbnail: z.string().optional(),
     icon: z.string().default('chart'),

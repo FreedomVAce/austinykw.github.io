@@ -24,7 +24,7 @@ Marketing and commercial teams treated every customer the same. They needed to k
 
 ## Data
 
-The public [UCI Online Retail dataset](https://doi.org/10.24432/C5BW33) (Chen, 2015; CC BY 4.0): 541,909 invoice lines from a UK online gift retailer, December 2010 to December 2011.
+The public [UCI Online Retail dataset](https://doi.org/10.24432/C5BW33) (Chen, 2015; CC BY 4.0): 541,909 invoice lines from a UK online gift retailer, December 2010 to December 2011. Many of its customers are wholesalers, which explains the heavy revenue concentration and frequent repeat orders.
 
 Cleaning is done in SQL, rule by rule, with a data-quality report:
 
@@ -56,7 +56,9 @@ Cancellations stay in as negative values, so spend is **net** of returns; custom
 | Lapsed | 36% | 7% | 186 days | 1 | 39% |
 
 - The top 20% of customers produce 74% of net revenue.
-- Segmented on past data only, Champions were worth £3,355 each over the following three months against £198 for lapsed customers — the segments **predict** behaviour, not just describe it.
+- Segmented on past data only, Champions were worth £3,355 each over the following three months against £198 for lapsed customers — the segments carry real information about future behaviour.
+- **But they are not a better predictor than simpler options.** Ranking customers by who returned, the four segments score an AUC of 0.71 — about the same as order count alone (0.72), and below a simple logistic regression on the same three features (0.74). The segments earn their place by being *actionable and explainable*; if the goal were only to predict returns, a direct model would do it better.
+- "Lapsed" does not mean lost: 39% of them bought again within three months — so win-back spend should be small and targeted, not zero.
 - Month-1 retention for 2011 cohorts runs 15–24%: the second order is where most customers are lost, which is why the "New or occasional" segment gets a conversion offer rather than a discount.
 - Retention is not a simple decay curve: every cohort peaks in November, the pre-Christmas season — so a cohort's summer dip is not churn.
 

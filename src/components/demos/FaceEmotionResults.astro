@@ -1,0 +1,100 @@
+---
+import { withBase } from '../../lib/url';
+const dataUrl = withBase('data/face-emotion.json');
+---
+<section class="viz-root demo faceemo" data-src={dataUrl} aria-labelledby="fe-demo-title">
+  <div class="demo-head">
+    <p class="eyebrow">Interactive results · from the project notebooks</p>
+    <h2 id="fe-demo-title">Model results explorer</h2>
+    <p class="demo-lead">
+      Training curves, confusion matrices and per-class scores for both models, read from the saved notebook outputs.
+      No face images are published.
+    </p>
+  </div>
+  <div class="toggle task-toggle" role="group" aria-label="Model" data-toggle="task">
+    <button type="button" data-v="face" aria-pressed="true">Face recognition (3 classes)</button>
+    <button type="button" data-v="emotion" aria-pressed="false">Emotion detection (7 classes)</button>
+  </div>
+  <p class="status" role="status" aria-live="polite">Loading data…</p>
+
+  <div class="fe-body" hidden>
+    <div class="tiles">
+      <div class="tile"><span class="t-label">Test accuracy</span><span class="t-value" data-k="acc">–</span><span class="t-note" data-k="accNote"></span></div>
+      <div class="tile"><span class="t-label">Naive baseline</span><span class="t-value" data-k="base">–</span><span class="t-note" data-k="baseNote"></span></div>
+      <div class="tile"><span class="t-label">Hardest class (recall)</span><span class="t-value" data-k="hard">–</span><span class="t-note" data-k="hardNote"></span></div>
+      <div class="tile"><span class="t-label">Data</span><span class="t-value" data-k="data">–</span><span class="t-note" data-k="dataNote"></span></div>
+    </div>
+
+    <div class="lower">
+      <figure class="chart-card">
+        <figcaption>
+          <span class="chart-title">Training curves</span>
+          <div class="toggle" role="group" aria-label="Curve metric" data-toggle="curve">
+            <button type="button" data-v="acc" aria-pressed="true">Accuracy</button>
+            <button type="button" data-v="loss" aria-pressed="false">Loss</button>
+          </div>
+        </figcaption>
+        <ul class="legend" aria-label="Legend">
+          <li><span class="sw" style="border-color: var(--series-1)"></span>Training</li>
+          <li><span class="sw" style="border-color: var(--series-2)"></span>Test</li>
+        </ul>
+        <div class="chart" data-chart="curves" aria-hidden="true"></div>
+        <div class="tooltip" role="tooltip" hidden></div>
+        <p class="fine" data-k="curveNote"></p>
+      </figure>
+      <figure class="chart-card">
+        <figcaption>
+          <span class="chart-title">Accuracy vs baselines</span>
+          <span class="sub">test set</span>
+        </figcaption>
+        <div class="bars" data-chart="baselines"></div>
+        <div class="tooltip" role="tooltip" hidden></div>
+        <p class="fine" data-k="baseFine"></p>
+      </figure>
+    </div>
+
+    <div class="lower">
+      <figure class="chart-card">
+        <figcaption>
+          <span class="chart-title">Confusion matrix</span>
+          <div class="toggle" role="group" aria-label="Matrix values" data-toggle="cm">
+            <button type="button" data-v="pct" aria-pressed="true">% of true class</button>
+            <button type="button" data-v="count" aria-pressed="false">Counts</button>
+          </div>
+        </figcaption>
+        <p class="fine cm-axis">Rows: true class · columns: predicted class · diagonal = correct</p>
+        <div class="table-wrap cm-wrap"><table class="data-table cm" data-table="cm"></table></div>
+        <p class="fine" data-k="cmNote"></p>
+      </figure>
+      <figure class="chart-card">
+        <figcaption>
+          <span class="chart-title">Per-class scores</span>
+          <div class="toggle" role="group" aria-label="Per-class metric" data-toggle="metric">
+            <button type="button" data-v="recall" aria-pressed="true">Recall</button>
+            <button type="button" data-v="precision" aria-pressed="false">Precision</button>
+            <button type="button" data-v="f1" aria-pressed="false">F1</button>
+          </div>
+        </figcaption>
+        <div class="bars" data-chart="perclass"></div>
+        <div class="tooltip" role="tooltip" hidden></div>
+        <p class="fine" data-k="metricNote"></p>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<style>
+  .task-toggle { margin: 1.25rem 0 0.5rem; }
+  .task-toggle :global(button) { font-size: 0.85rem; min-height: 38px; padding: 0.3rem 0.95rem; }
+  .cm-axis { margin: -0.25rem 0 0.5rem !important; }
+  .cm-wrap { max-height: none; }
+  .cm :global(td) { text-align: center !important; font-size: 0.8rem; min-width: 2.8rem; padding: 0.45rem 0.35rem; }
+  .cm :global(th) { font-size: 0.75rem; text-align: center !important; }
+  .cm :global(tbody th) { text-align: right !important; padding-right: 0.5rem; }
+  .cm :global(td.diag) { outline: 2px solid var(--text-primary); outline-offset: -2px; font-weight: 700; }
+</style>
+
+<script>
+  import { mountFaceEmotionDemo } from '../../lib/face-demo';
+  document.querySelectorAll<HTMLElement>('.viz-root.faceemo').forEach((root) => mountFaceEmotionDemo(root));
+</script>

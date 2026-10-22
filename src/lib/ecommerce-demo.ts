@@ -13,6 +13,7 @@ type Data = {
     fit: { n: number; pseudo_r2: number };
     counterfactual: { actual_avg: number; if_on_time_avg: number; late_share_of_orders: number; late_share_of_low_reviews: number };
     rank_test: { late_mean: number; ontime_mean: number };
+    within_seller: { odds_ratio: number; ci_low: number; ci_high: number; strata: number };
   };
 };
 
@@ -123,7 +124,8 @@ export async function mountEcommerceDemo(root: HTMLElement) {
       el('circle', { cx: x(r.odds_ratio), cy: yy, r: 5, fill: strong ? 'var(--series-1)' : 'var(--surface-1)', stroke: 'var(--series-1)', 'stroke-width': 2 }, g);
       el('text', { x: Math.min(x(r.ci_high) + 8, W - pad.r + 8), y: yy + 4 }, g).textContent = `${r.odds_ratio.toFixed(r.odds_ratio < 10 ? 2 : 1)}×`;
     });
-    set('forestNote', `n = ${fmtNum(data.stats.fit.n)} delivered, reviewed orders. Each odds ratio holds the other factors constant; hollow dots are not distinguishable from no effect. Observational data — association, not proof of cause.`);
+    const ws = data.stats.within_seller;
+    set('forestNote', `n = ${fmtNum(data.stats.fit.n)} delivered, reviewed orders. Each odds ratio holds the other factors constant; hollow dots are not distinguishable from no effect. Comparing only orders from the same seller (${fmtNum(ws.strata)} sellers), late delivery still has ${ws.odds_ratio.toFixed(1)}× the odds (95% CI ${ws.ci_low.toFixed(1)}–${ws.ci_high.toFixed(1)}). Observational data — association, not proof of cause.`);
   }
 
   function drawBars(kind: 'states' | 'categories') {

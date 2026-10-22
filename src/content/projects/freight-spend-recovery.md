@@ -61,6 +61,8 @@ The model is plain SQL, run in DuckDB:
 | A carrier's mid-year rate increase not passed on until January | charge-to-cost ratio vs same-service peers | $16.2k |
 | One quarter where a quarter of charged shipments were credited | credit rate by branch and quarter | $3.7k |
 
+These are upper bounds: some waived freight wins orders that would otherwise go elsewhere, so the recoverable share of the waiver finding depends on price sensitivity — a pilot at the outlier branch would measure it. Duplicate billing, by contrast, is recoverable in full.
+
 The largest cost on the page is not a leak at all: free freight above the order threshold costs about $0.6M a year, 7–12% of order value. Whether the threshold pays for itself is a pricing decision that this data can frame but not settle.
 
 ## Business impact
