@@ -44,20 +44,23 @@ For this public version, a simulator generates four years of that ledger for 10 
 
 ## Results
 
-Mean MASE per series (scaled error — lower is better; 1.0 is the baseline's in-sample error):
+Backtest error on months the models never saw, averaged over 50 product × branch series:
 
-| Model | MASE | Mean abs. error | Bias | Best on |
-|---|---|---|---|---|
-| Seasonal regression | 1.015 | 10.1 units/mo | −1.9% | 11 series |
-| Ensemble | 1.016 | 10.1 | −2.3% | 6 |
-| Holt-Winters | 1.021 | 10.2 | −3.0% | 17 |
-| SARIMA | 1.046 | 10.3 | −2.1% | 7 |
-| Seasonal naive | 1.160 | 11.6 | −4.7% | 9 |
+| Model | Mean abs. error | vs baseline | MASE | Bias | Best on |
+|---|---|---|---|---|---|
+| Ensemble | 10.1 units/mo | **−13%** | 1.016 | −2.3% | 6 series |
+| Seasonal regression | 10.1 | −13% | 1.015 | −1.9% | 11 |
+| Holt-Winters | 10.2 | −12% | 1.021 | −3.0% | 17 |
+| SARIMA | 10.3 | −11% | 1.046 | −2.1% | 7 |
+| Seasonal naive (baseline) | 11.6 | — | 1.160 | −4.7% | 9 |
+
+MASE scales each series' error by the baseline's *in-sample* error, so values above 1.0 do not mean "worse than the baseline" — the baseline itself scores 1.16 out of sample. The "vs baseline" column is the direct comparison.
 
 - Every statistical model beats the baseline at every horizon; one month ahead, seasonal regression cuts the absolute error by about 16%.
 - No model wins everywhere. Holt-Winters is best on the most series, regression on average, so the demo lets you compare per series instead of declaring one winner.
 - All models under-forecast slightly. Part of that is structural: lost sales never reach the ledger, so recorded demand is a little lower than true demand.
 - The intermittent product (about 10 units a month) is barely forecastable at monthly level — every model lands close to the baseline, which is a signal to use a different method rather than a better-tuned one.
+- **Caveat:** the simulator's seasonality is regular (the same shape every year), which suits seasonal regression. On real data, where seasons shift and promotions vary, the adaptive methods (Holt-Winters, SARIMA) or the ensemble would likely close the gap — which is why the demo keeps all of them.
 
 ## Business impact
 
@@ -71,7 +74,7 @@ In the original work, branch-level forecast tables supported more accurate stock
 
 ## What I learned
 
-Simple, well-specified models with good data preparation beat complex ones on short monthly series — and a baseline is essential, because "the model fits well" means little until it beats "same month last year".
+On short monthly series, data preparation and an honest backtest matter more than model choice: four quite different models land within two points of each other, and all beat the baseline by 11–13%. A baseline is essential — "the model fits well" means little until it beats "same month last year".
 
 ## Technology
 

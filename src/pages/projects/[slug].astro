@@ -8,6 +8,7 @@ import FreightDashboard from '../../components/demos/FreightDashboard.astro';
 import RecommenderDemo from '../../components/demos/RecommenderDemo.astro';
 import SegmentationDemo from '../../components/demos/SegmentationDemo.astro';
 import EcommerceDashboard from '../../components/demos/EcommerceDashboard.astro';
+import FaceEmotionResults from '../../components/demos/FaceEmotionResults.astro';
 import { getProjects, STATUS_LABEL, type Project } from '../../lib/projects';
 import { withBase } from '../../lib/url';
 
@@ -24,7 +25,7 @@ const { project, prev, next } = Astro.props;
 const { data } = project;
 const { Content, headings } = await render(project);
 // Demo id (front matter `demo:`) -> component. Add new demos here.
-const DEMOS = { 'inventory-forecast': InventoryForecast, 'freight-dashboard': FreightDashboard, recommender: RecommenderDemo, segmentation: SegmentationDemo, ecommerce: EcommerceDashboard } as const;
+const DEMOS = { 'inventory-forecast': InventoryForecast, 'freight-dashboard': FreightDashboard, recommender: RecommenderDemo, segmentation: SegmentationDemo, ecommerce: EcommerceDashboard, 'face-emotion': FaceEmotionResults } as const;
 const Demo = data.demo ? DEMOS[data.demo] : undefined;
 const toc = headings.filter((h) => h.depth === 2);
 const links = [

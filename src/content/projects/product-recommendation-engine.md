@@ -50,7 +50,7 @@ The hybrid score is a weighted sum per customer segment, plus a small popularity
 - Signals are built with sparse matrices (SciPy) and stored as anchor × candidate score tables.
 - An offline pipeline generates data, tunes, evaluates, and writes the serving model.
 - A **FastAPI** service loads the model once and serves product-page and cart recommendations from memory.
-- 17 tests cover signal invariants, ranking maths, leakage-free time splits, out-of-time performance, the API contract, and that the data behind the demo on this page reproduces the full model's top-5 for more than 95% of products.
+- 18 tests cover signal invariants, ranking maths, leakage-free time splits, out-of-time performance, the API contract, and that the data behind the demo on this page reproduces the full model's top-5 for more than 95% of products.
 
 ## Evaluation
 
@@ -67,14 +67,18 @@ Weights are grid-searched per segment (286 combinations) on a validation window 
 
 ## Results
 
-- The tuned hybrid ranks best in every segment and recommends from far more of the catalogue than any single signal.
+- The tuned hybrid ranks best in every segment and recommends from far more of the catalogue than any single signal (77% vs 57%).
+- **How big is the gain?** Against market basket alone, case by case over 4,490 test baskets: ranking quality (NDCG@10) improves by +0.020 (95% CI +0.015 to +0.025) — a real gain — but the hit rate is statistically the same (+0.3 points, CI −0.6 to +1.2). The hybrid puts the right product *higher*, not *more often* in the top ten.
 - **Hand-picked blend weights did worse than the best single signal.** A hybrid only helps once it is tuned against held-out data.
 - Tuning sets collaborative filtering to zero for basket completion: within an invoice it adds nothing market-basket analysis does not already capture. Retail customers, with the least history, lean most on curated rules.
+- **On synthetic data, the simulator shapes the winner.** Baskets are generated from job templates, which is exactly the pattern market-basket analysis captures; on real data collaborative filtering would likely earn more weight. The method — tune on validation, report on test, compare to baselines — is what transfers.
 - Predicting a customer's *next* order is a different problem: every method lands near popularity, because a trade account's next invoice is usually a new job. That calls for personalisation from each customer's own history — the next step, not a tuning problem.
 
 ## Business impact
 
 In the original work, the system was designed to improve cross-sell opportunities and increase basket size.
+
+Offline metrics only rank candidates; the business question is whether customers add more to the cart. The next step in production is an A/B test on add-to-cart rate and basket value, with the offline scores used to choose which version to test.
 
 ## Challenges
 
@@ -84,4 +88,4 @@ In the original work, the system was designed to improve cross-sell opportunitie
 
 ## Technology
 
-Python, NumPy, SciPy (sparse matrices) and pandas for the signals and evaluation; FastAPI for serving; pytest. The explorer on this page re-implements the hybrid scoring in the browser over exported candidate lists, so changing weights or the cart re-ranks instantly.
+Python, NumPy, SciPy (sparse matrices) and pandas for the signals and evaluation; FastAPI for serving; pytest — 18 tests, including a paired bootstrap for comparing methods. The explorer on this page re-implements the hybrid scoring in the browser over exported candidate lists, so changing weights or the cart re-ranks instantly.

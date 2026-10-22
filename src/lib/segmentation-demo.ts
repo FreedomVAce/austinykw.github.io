@@ -8,7 +8,7 @@ type Data = {
   meta: { customers: number; segments: string[]; cutoff: string; outcome_end: string; k: number };
   profile: Profile[];
   points: { frequency: number[]; monetary: number[]; recency: number[]; segment: number[] };
-  holdout: { segments: { segment: string; customers: number; return_rate: number; revenue_per_customer: number }[]; overall: { return_rate: number } };
+  holdout: { segments: { segment: string; customers: number; return_rate: number; revenue_per_customer: number }[]; overall: { return_rate: number; auc: { segments: number; frequency_only: number; logistic_rfm_cv: number } } };
   cohorts: { cohort: string; cohort_size: number; month_offset: number; retention: number }[];
   selection: { k: number; silhouette: number; stability: number }[];
 };
@@ -120,7 +120,7 @@ export async function mountSegmentationDemo(root: HTMLElement) {
   // Out-of-time validation
   const hold = data.holdout;
   set('holdSub', `segmented on data before ${day(data.meta.cutoff)}`);
-  set('holdNote', `Customers followed from ${day(data.meta.cutoff)} to ${day(data.meta.outcome_end)}. All customers: ${Math.round(100 * hold.overall.return_rate)}% bought again.`);
+  set('holdNote', `Customers followed from ${day(data.meta.cutoff)} to ${day(data.meta.outcome_end)}. All customers: ${Math.round(100 * hold.overall.return_rate)}% bought again. As a predictor of who returns, the segments score AUC ${hold.overall.auc.segments.toFixed(2)} — similar to order count alone (${hold.overall.auc.frequency_only.toFixed(2)}) and below a simple logistic model (${hold.overall.auc.logistic_rfm_cv.toFixed(2)}): their value is being actionable, not predictive accuracy.`);
   const drawHold = () => barChart($<HTMLElement>('[data-chart="holdout"]'), $<HTMLElement>('[data-chart="holdout"] + .tooltip'), {
     items: hold.segments.map((s) => ({ label: s.segment, value: s.return_rate,
       tip: [['Customers', fmtNum(s.customers)], ['Revenue per customer', gbp(s.revenue_per_customer)]] as [string, string][] })),
