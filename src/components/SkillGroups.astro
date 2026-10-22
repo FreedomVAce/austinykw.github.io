@@ -1,0 +1,19 @@
+---
+import { skillGroups } from '../data/profile';
+---
+<div class="grid grid--3">
+  {skillGroups.map((g) => (
+    <section class="card group">
+      <h3>{g.title}</h3>
+      <p>{g.detail}</p>
+      <ul class="chips">
+        {g.items.map((i) => <li class="chip">{i}</li>)}
+      </ul>
+    </section>
+  ))}
+</div>
+<style>
+  .group { padding: 22px; display: flex; flex-direction: column; gap: 0.6rem; }
+  .group h3 { font-size: 1.02rem; }
+  .group p { color: var(--muted); font-size: 0.9rem; flex: 1; }
+</style>

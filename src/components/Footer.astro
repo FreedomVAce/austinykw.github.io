@@ -1,0 +1,27 @@
+---
+import Icon from './Icon.astro';
+import { profile } from '../data/profile';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container row">
+    <p>© {year} {profile.name} · {profile.location}</p>
+    <ul class="links">
+      <li><a href={profile.links.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><Icon name="linkedin" size={18} /></a></li>
+      <li><a href={profile.links.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub"><Icon name="github" size={18} /></a></li>
+      {profile.links.email && <li><a href={`mailto:${profile.links.email}`} aria-label="Email"><Icon name="mail" size={18} /></a></li>}
+    </ul>
+  </div>
+  <div class="container">
+    <p class="note">Case studies based on confidential work use synthetic or public data. No employer or customer data is published on this site.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer { border-top: 1px solid var(--line); padding-block: 28px; color: var(--muted); font-size: 0.85rem; }
+  .row { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .links { display: flex; gap: 0.5rem; list-style: none; padding: 0; }
+  .links a { display: grid; place-items: center; width: 40px; height: 40px; color: var(--muted); border-radius: var(--radius-sm); }
+  .links a:hover { color: var(--ink); background: var(--surface-2); }
+  .note { margin-top: 0.75rem; font-size: 0.78rem; max-width: 70ch; }
+</style>

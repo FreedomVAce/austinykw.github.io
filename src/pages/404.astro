@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import { withBase } from '../lib/url';
+---
+<Base title="Page not found">
+  <section class="section">
+    <div class="container nf">
+      <p class="eyebrow">404</p>
+      <h1 class="section-title">This page doesn't exist</h1>
+      <p class="section-lead">It may have moved when the site was rebuilt.</p>
+      <div class="cta">
+        <a class="btn btn--primary" href={withBase('')}>Home</a>
+        <a class="btn btn--ghost" href={withBase('projects/')}>Projects</a>
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .nf { min-height: 50vh; }
+  .cta { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+</style>

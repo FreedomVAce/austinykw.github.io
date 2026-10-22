@@ -1,0 +1,155 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import ProvenanceBadge from '../../components/ProvenanceBadge.astro';
+import InventoryForecast from '../../components/demos/InventoryForecast.astro';
+import FreightDashboard from '../../components/demos/FreightDashboard.astro';
+import RecommenderDemo from '../../components/demos/RecommenderDemo.astro';
+import SegmentationDemo from '../../components/demos/SegmentationDemo.astro';
+import EcommerceDashboard from '../../components/demos/EcommerceDashboard.astro';
+import { getProjects, STATUS_LABEL, type Project } from '../../lib/projects';
+import { withBase } from '../../lib/url';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project, i) => ({
+    params: { slug: project.id },
+    props: { project, prev: projects[i - 1], next: projects[i + 1] },
+  }));
+}
+
+interface Props { project: Project; prev?: Project; next?: Project }
+const { project, prev, next } = Astro.props;
+const { data } = project;
+const { Content, headings } = await render(project);
+// Demo id (front matter `demo:`) -> component. Add new demos here.
+const DEMOS = { 'inventory-forecast': InventoryForecast, 'freight-dashboard': FreightDashboard, recommender: RecommenderDemo, segmentation: SegmentationDemo, ecommerce: EcommerceDashboard } as const;
+const Demo = data.demo ? DEMOS[data.demo] : undefined;
+const toc = headings.filter((h) => h.depth === 2);
+const links = [
+  data.links.demo && { href: data.links.demo.startsWith('http') ? data.links.demo : withBase(data.links.demo), label: 'Live demo', icon: 'chart' },
+  data.links.repo && { href: data.links.repo, label: 'Code on GitHub', icon: 'github' },
+  data.links.notebook && { href: data.links.notebook, label: 'Notebook', icon: 'file' },
+].filter(Boolean) as { href: string; label: string; icon: string }[];
+---
+<Base title={data.title} description={data.summary} image={data.thumbnail}>
+  <article>
+    <header class="cs-head">
+      <div class="container">
+        <a class="back" href={withBase('projects/')}><Icon name="back" size={16} /> All projects</a>
+        <p class="eyebrow">{data.category}</p>
+        <h1>{data.title}</h1>
+        <p class="lead">{data.summary}</p>
+        <div class="meta">
+          <ProvenanceBadge provenance={data.provenance} />
+          <span class={`badge status--${data.status}`}>{STATUS_LABEL[data.status]}</span>
+          {data.context && <span class="context">{data.context}</span>}
+        </div>
+        {data.metrics.length > 0 && (
+          <dl class="metrics">
+            {data.metrics.map((m) => (
+              <div class="metric"><dt>{m.label}</dt><dd>{m.value}</dd></div>
+            ))}
+          </dl>
+        )}
+      </div>
+    </header>
+
+    {Demo && (
+      <div class="demo-band">
+        <div class="container"><Demo /></div>
+      </div>
+    )}
+
+    <div class="container cs-body">
+      <aside class="side" aria-label="Project details">
+        {data.provenanceNote && (
+          <div class="note">
+            <Icon name="shield" size={18} />
+            <p>{data.provenanceNote}</p>
+          </div>
+        )}
+        <div class="block">
+          <h2>Tech stack</h2>
+          <ul class="chips">{data.stack.map((s) => <li class="chip">{s}</li>)}</ul>
+        </div>
+        <div class="block">
+          <h2>Skills shown</h2>
+          <ul class="chips">{data.skills.map((s) => <li class="chip">{s}</li>)}</ul>
+        </div>
+        {(links.length > 0 || data.links.codePrivate) && (
+          <div class="block">
+            <h2>Links</h2>
+            <ul class="link-list">
+              {links.map((l) => (
+                <li><a href={l.href} target={l.href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer"><Icon name={l.icon} size={16} /> {l.label}</a></li>
+              ))}
+              {data.links.codePrivate && (
+                <li class="private"><Icon name="github" size={16} /> Code in a private repository — <a href={withBase('contact/')}>available on request</a></li>
+              )}
+            </ul>
+          </div>
+        )}
+        {toc.length > 2 && (
+          <nav class="block toc" aria-label="On this page">
+            <h2>On this page</h2>
+            <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+          </nav>
+        )}
+      </aside>
+
+      <div class="prose">
+        <Content />
+      </div>
+    </div>
+
+    <nav class="container pager" aria-label="More projects">
+      {prev ? <a href={withBase(`projects/${prev.id}/`)} class="card"><span>Previous</span>{prev.data.title}</a> : <span />}
+      {next ? <a href={withBase(`projects/${next.id}/`)} class="card next"><span>Next</span>{next.data.title}</a> : <span />}
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .cs-head { background: var(--bg-alt); border-bottom: 1px solid var(--line); padding-block: clamp(32px, 6vw, 64px); }
+  .back { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.88rem; text-decoration: none; margin-bottom: 1.5rem; color: var(--muted); }
+  .back:hover { color: var(--ink); }
+  .cs-head h1 { font-size: clamp(2.1rem, 5vw, 3.3rem); margin-bottom: 0.9rem; }
+  .lead { font-size: clamp(1.05rem, 2vw, 1.2rem); color: var(--ink-2); max-width: 64ch; }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; margin-top: 1.25rem; }
+  .context { font-size: 0.85rem; color: var(--muted); }
+  .status--complete { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 45%, transparent); }
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 1rem; margin-top: 2rem; }
+  .metric { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem 1.15rem; display: flex; flex-direction: column-reverse; gap: 0.2rem; }
+  .metric dd { font-family: var(--font-mono); font-size: 1.7rem; font-weight: 500; color: var(--ink); }
+  .metric dt { font-size: 0.82rem; color: var(--muted); }
+
+  .demo-band { border-bottom: 1px solid var(--line); }
+  .cs-body { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: clamp(32px, 5vw, 64px); padding-block: clamp(40px, 6vw, 64px); align-items: start; }
+  .side { position: sticky; top: 88px; display: flex; flex-direction: column; gap: 1.5rem; }
+  .block h2 { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.6rem; }
+  .note { display: flex; gap: 0.6rem; padding: 0.9rem; border-radius: var(--radius-sm); background: color-mix(in srgb, var(--info) 10%, transparent); border: 1px solid color-mix(in srgb, var(--info) 30%, transparent); color: var(--info); }
+  .note :global(svg) { flex: none; margin-top: 2px; }
+  .note p { font-size: 0.84rem; color: var(--ink-2); }
+  .link-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.4rem; }
+  .link-list a { display: inline-flex; align-items: center; gap: 0.45rem; font-size: 0.92rem; font-weight: 500; text-decoration: none; }
+  .link-list .private { display: flex; gap: 0.45rem; font-size: 0.86rem; color: var(--muted); }
+  .link-list .private :global(svg) { flex: none; margin-top: 3px; }
+  .toc ol { list-style: none; padding: 0; border-left: 1px solid var(--line); }
+  .toc a { display: block; padding: 0.2rem 0 0.2rem 0.8rem; font-size: 0.86rem; color: var(--muted); text-decoration: none; }
+  .toc a:hover { color: var(--ink); }
+
+  .pager { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding-bottom: clamp(48px, 8vw, 80px); }
+  .pager a { display: flex; flex-direction: column; gap: 0.2rem; padding: 1rem 1.2rem; text-decoration: none; color: var(--ink); font-weight: 600; }
+  .pager a span { font-size: 0.78rem; font-weight: 500; color: var(--muted); }
+  .pager a:hover { border-color: var(--accent); }
+  .pager .next { text-align: right; }
+
+  @media (max-width: 860px) {
+    .cs-body { grid-template-columns: minmax(0, 1fr); }
+    .side { position: static; }
+    .toc { display: none; }
+  }
+  @media (max-width: 520px) { .pager { grid-template-columns: 1fr; } .pager .next { text-align: left; } }
+</style>
