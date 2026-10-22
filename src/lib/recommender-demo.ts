@@ -64,6 +64,13 @@ export async function mountRecommenderDemo(root: HTMLElement) {
   const cart: number[] = [];
   const mode = () => (form.querySelector<HTMLInputElement>('input[name="mode"]:checked')?.value ?? 'product');
   const weights = (): Weights => Object.fromEntries(SIGNALS.map((s) => [s, Number(slider(s).value)])) as Weights;
+  // Show which preset (if any) the sliders currently match, so a preset button never looks dead.
+  const markPreset = () => {
+    const cur = weights();
+    const same = (w: Weights) => SIGNALS.every((s) => Math.abs((w[s] ?? 0) - cur[s]) < 1e-9);
+    $<HTMLButtonElement>('[data-act="tuned"]').setAttribute('aria-pressed', String(same(data.weights.tuned[sel('segment').value])));
+    $<HTMLButtonElement>('[data-act="default"]').setAttribute('aria-pressed', String(same(data.weights.default)));
+  };
   const setWeights = (w: Weights, note: string) => {
     for (const s of SIGNALS) slider(s).value = String(w[s] ?? 0);
     $<HTMLElement>('[data-k="wnote"]').textContent = note;
@@ -107,6 +114,7 @@ export async function mountRecommenderDemo(root: HTMLElement) {
 
   function render() {
     for (const s of SIGNALS) output(s).textContent = Number(slider(s).value).toFixed(2);
+    markPreset();
     renderCart();
     const anchors = mode() === 'cart' ? cart : [Number(sel('product').value)];
     $<HTMLElement>('[data-k="title"]').textContent = mode() === 'cart'
