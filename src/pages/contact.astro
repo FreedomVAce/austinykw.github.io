@@ -1,0 +1,94 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { profile } from '../data/profile';
+
+const { linkedin, github, email, formspreeId } = profile.links;
+---
+<Base title="Contact" description={`Get in touch with ${profile.name}.`}>
+  <section class="section">
+    <div class="container contact">
+      <div>
+        <p class="eyebrow">Contact</p>
+        <h1 class="section-title">Let's connect</h1>
+        <p class="section-lead">
+          Whether it's a role, a project or a coffee chat about data and analytics, I'd like to hear from you.
+          LinkedIn is the quickest way to reach me.
+        </p>
+        <ul class="channels">
+          <li>
+            <a class="card channel" href={linkedin} target="_blank" rel="noopener noreferrer">
+              <Icon name="linkedin" size={20} /><span><strong>LinkedIn</strong>{linkedin.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}</span>
+            </a>
+          </li>
+          <li>
+            <a class="card channel" href={github} target="_blank" rel="noopener noreferrer">
+              <Icon name="github" size={20} /><span><strong>GitHub</strong>{github.replace(/^https?:\/\//, '')}</span>
+            </a>
+          </li>
+          {email && (
+            <li>
+              <a class="card channel" href={`mailto:${email}`}>
+                <Icon name="mail" size={20} /><span><strong>Email</strong>{email}</span>
+              </a>
+            </li>
+          )}
+          <li>
+            <div class="card channel static"><Icon name="pin" size={20} /><span><strong>Location</strong>{profile.location}</span></div>
+          </li>
+        </ul>
+      </div>
+
+      {formspreeId && (
+        <form class="card form" action={`https://formspree.io/f/${formspreeId}`} method="POST" id="contact-form">
+          <div class="row">
+            <label>Name<input type="text" name="name" autocomplete="name" required /></label>
+            <label>Email<input type="email" name="email" autocomplete="email" required /></label>
+          </div>
+          <label>Subject<input type="text" name="subject" /></label>
+          <label>Message<textarea name="message" rows="6" required></textarea></label>
+          <button class="btn btn--primary" type="submit">Send message</button>
+          <p class="form-status" role="status" aria-live="polite"></p>
+        </form>
+      )}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .contact { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: clamp(32px, 6vw, 64px); align-items: start; }
+  .channels { list-style: none; padding: 0; display: grid; gap: 0.75rem; margin-top: 2rem; max-width: 460px; }
+  .channel { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.15rem; text-decoration: none; color: var(--accent); }
+  .channel span { display: flex; flex-direction: column; color: var(--ink-2); font-size: 0.92rem; overflow-wrap: anywhere; }
+  .channel strong { color: var(--ink); font-size: 0.8rem; font-family: var(--font-mono); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+  a.channel:hover { border-color: var(--accent); }
+  .form { padding: clamp(20px, 3vw, 32px); display: grid; gap: 1rem; }
+  .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 1rem; }
+  label { display: grid; gap: 0.35rem; font-size: 0.85rem; font-weight: 600; color: var(--ink-2); }
+  input, textarea {
+    font: inherit; font-weight: 400; font-size: 0.95rem; color: var(--ink);
+    background: var(--surface-2); border: 1px solid var(--line-strong); border-radius: var(--radius-sm);
+    padding: 0.65rem 0.8rem; resize: vertical;
+  }
+  input:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .form .btn { justify-self: start; }
+  .form-status { font-size: 0.88rem; min-height: 1.3em; }
+</style>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const status = form?.querySelector<HTMLElement>('.form-status');
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!status) return;
+    status.textContent = 'Sending…';
+    try {
+      const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+      if (!res.ok) throw new Error(String(res.status));
+      status.textContent = "Thanks — I'll get back to you soon.";
+      form.reset();
+    } catch {
+      status.textContent = 'Something went wrong. Please try again, or message me on LinkedIn.';
+    }
+  });
+</script>

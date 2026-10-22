@@ -1,0 +1,3 @@
+#!/bin/sh
+# Blocks a push if the site or source contains any term from the private denylist.
+npm run build --silent >/dev/null && node scripts/scan-confidential.mjs

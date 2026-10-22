@@ -1,0 +1,93 @@
+---
+import { withBase } from '../../lib/url';
+const dataUrl = withBase('data/inventory-forecast.json');
+---
+<section class="viz-root demo" data-src={dataUrl} aria-labelledby="inv-demo-title">
+  <div class="demo-head">
+    <div>
+      <p class="eyebrow">Interactive demo · synthetic data</p>
+      <h2 id="inv-demo-title">Forecast explorer</h2>
+      <p class="demo-lead">
+        Pick a product and branch to see four years of monthly sales, how each model performed when it was
+        tested on months it had never seen, and the six-month forecast that drives the reorder decision.
+      </p>
+    </div>
+  </div>
+
+  <form class="controls" aria-label="Forecast explorer controls" onsubmit="return false">
+    <label>Product<select name="sku"></select></label>
+    <label>Branch<select name="branch"></select></label>
+    <label>Model<select name="model"></select></label>
+    <label class="range">Service level <output name="svcOut">95%</output>
+      <input type="range" name="svc" min="80" max="99.5" step="0.5" value="95" />
+    </label>
+    <label class="range">Lead time <output name="ltOut">— days</output>
+      <input type="range" name="lt" min="5" max="60" step="1" value="21" />
+    </label>
+  </form>
+
+  <p class="status" role="status" aria-live="polite">Loading data…</p>
+
+  <div class="tiles" hidden>
+    <div class="tile"><span class="t-label">Backtest error vs baseline</span><span class="t-value" data-k="skill">–</span><span class="t-note" data-k="skillNote"></span></div>
+    <div class="tile"><span class="t-label">Forecast, next 6 months</span><span class="t-value" data-k="fc6">–</span><span class="t-note" data-k="fc6Note"></span></div>
+    <div class="tile"><span class="t-label">Reorder point</span><span class="t-value" data-k="rop">–</span><span class="t-note" data-k="ropNote"></span></div>
+    <div class="tile"><span class="t-label">Suggested order</span><span class="t-value" data-k="order">–</span><span class="t-note" data-k="orderNote"></span></div>
+  </div>
+
+  <figure class="chart-card" hidden>
+    <figcaption>
+      <span class="chart-title">Units sold per month</span>
+      <ul class="legend" aria-label="Legend">
+        <li><span class="sw sw-actual"></span>Actual sales</li>
+        <li><span class="sw sw-bt"></span>Backtest (1 month ahead)</li>
+        <li><span class="sw sw-fc"></span>Forecast</li>
+        <li><span class="sw sw-band"></span>80% interval</li>
+      </ul>
+    </figcaption>
+    <div class="chart" aria-hidden="true"></div>
+    <div class="tooltip" role="tooltip" hidden></div>
+    <details class="table-view">
+      <summary>Show data table</summary>
+      <div class="table-wrap"><table class="data-table"></table></div>
+    </details>
+  </figure>
+
+  <div class="lower" hidden>
+    <figure class="chart-card">
+      <figcaption><span class="chart-title">Backtest error by model, this series</span>
+        <span class="sub">MASE · lower is better · dashed line = baseline</span></figcaption>
+      <div class="bars"></div>
+    </figure>
+    <div class="chart-card calc">
+      <h3>How the reorder is computed</h3>
+      <dl class="calc-list"></dl>
+      <p class="fine">Safety stock uses the selected model's own one-month-ahead backtest error, so a less accurate
+        model carries more stock. Orders round up to the supplier case pack.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .controls label:first-child { grid-column: span 2; }
+  @media (max-width: 420px) { .controls label:first-child { grid-column: auto; } }
+  @media (min-width: 900px) {
+    .controls { grid-template-columns: 2fr repeat(4, 1fr); }
+    .controls label:first-child { grid-column: auto; }
+  }
+  .sw-actual { border-color: var(--series-1); }
+  .sw-bt { border-color: var(--series-2); border-top-style: dashed; }
+  .sw-fc { border-color: var(--series-2); }
+  .sw-band { height: 10px; border: 0; background: var(--band); border-radius: 2px; }
+  .calc h3 { font-size: 0.95rem; margin-bottom: 0.75rem; }
+  .calc-list { display: grid; gap: 0.45rem; font-size: 0.88rem; }
+  .calc-list :global(div) { display: flex; justify-content: space-between; gap: 1rem; border-bottom: 1px dashed var(--line); padding-bottom: 0.35rem; }
+  .calc-list :global(dt) { color: var(--text-secondary); }
+  .calc-list :global(dd) { font-family: var(--font-mono); color: var(--text-primary); text-align: right; }
+  .calc-list :global(.total) { border-bottom: 0; font-weight: 600; }
+</style>
+
+<script>
+  import { mountInventoryDemo } from '../../lib/inventory-demo';
+  document.querySelectorAll<HTMLElement>('.viz-root[data-src]').forEach((root) => mountInventoryDemo(root));
+</script>

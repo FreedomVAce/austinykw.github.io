@@ -1,0 +1,146 @@
+---
+import { withBase } from '../../lib/url';
+const dataUrl = withBase('data/freight-dashboard.json');
+const parquetUrl = withBase('data/freight-shipments.parquet');
+---
+<section class="viz-root demo freight" data-src={dataUrl} data-parquet={parquetUrl} aria-labelledby="fr-demo-title">
+  <div class="demo-head">
+    <p class="eyebrow">Interactive dashboard · synthetic data</p>
+    <h2 id="fr-demo-title">Freight recovery dashboard</h2>
+    <p class="demo-lead">
+      Four years of carrier invoices reconciled to shipments and customer billing. Filter by year, region and
+      carrier; every figure is recomputed from the monthly branch × carrier cube produced by the SQL model.
+    </p>
+  </div>
+
+  <form class="controls" aria-label="Dashboard filters" onsubmit="return false">
+    <label>Year<select name="year"></select></label>
+    <label>Region<select name="region"></select></label>
+    <label>Carrier<select name="carrier"></select></label>
+  </form>
+  <p class="status" role="status" aria-live="polite">Loading data…</p>
+
+  <div class="body" hidden>
+    <div class="tiles">
+      <div class="tile"><span class="t-label">Freight spend</span><span class="t-value" data-k="spend">–</span><span class="t-note" data-k="spendNote"></span></div>
+      <div class="tile"><span class="t-label">Recovered from customers</span><span class="t-value" data-k="rec">–</span><span class="t-note" data-k="recNote"></span></div>
+      <div class="tile"><span class="t-label">Recovery rate (billable freight)</span><span class="t-value" data-k="rate">–</span><span class="t-note" data-k="rateNote"></span></div>
+      <div class="tile"><span class="t-label">Net freight cost</span><span class="t-value" data-k="net">–</span><span class="t-note" data-k="netNote"></span></div>
+    </div>
+
+    <figure class="chart-card">
+      <figcaption>
+        <span class="chart-title">Billable freight spend vs recovered, by month</span>
+        <ul class="legend" aria-label="Legend">
+          <li><span class="sw" style="border-color: var(--series-1)"></span>Billable spend</li>
+          <li><span class="sw" style="border-color: var(--series-2)"></span>Recovered</li>
+        </ul>
+      </figcaption>
+      <div class="chart" data-chart="monthly" aria-hidden="true"></div>
+      <div class="tooltip" role="tooltip" hidden></div>
+      <details class="table-view"><summary>Show data table</summary>
+        <div class="table-wrap"><table class="data-table" data-table="monthly"></table></div></details>
+    </figure>
+
+    <div class="lower">
+      <figure class="chart-card">
+        <figcaption><span class="chart-title">Recovery rate by branch</span><span class="sub">dashed line = all branches</span></figcaption>
+        <div class="bars" data-chart="branches"></div>
+        <div class="tooltip" role="tooltip" hidden></div>
+      </figure>
+      <figure class="chart-card">
+        <figcaption><span class="chart-title">Where unrecovered freight goes</span><span class="sub">billable shipments</span></figcaption>
+        <div class="bars" data-chart="causes"></div>
+        <div class="tooltip" role="tooltip" hidden></div>
+        <p class="fine" data-k="causesNote"></p>
+      </figure>
+    </div>
+
+    <figure class="chart-card ratio-card">
+      <figcaption>
+        <span class="chart-title">Charge-to-cost ratio by quarter: <span data-k="ratioLegend">–</span> vs other LTL carriers</span>
+        <ul class="legend" aria-label="Legend">
+          <li><span class="sw" style="border-color: var(--series-1)"></span>Other LTL carriers (mean)</li>
+          <li><span class="sw" style="border-color: var(--series-2)"></span><span data-k="ratioLegend2">–</span></li>
+        </ul>
+      </figcaption>
+      <p class="fine ratio-note">Customer freight charged ÷ carrier cost, all branches. Below 1.0 the freight loses money.</p>
+      <div class="chart" data-chart="ratio" aria-hidden="true"></div>
+      <div class="tooltip" role="tooltip" hidden></div>
+      <details class="table-view"><summary>Show data table</summary>
+        <div class="table-wrap"><table class="data-table" data-table="ratio"></table></div></details>
+    </figure>
+
+    <section class="findings" aria-labelledby="fr-find-title">
+      <h3 id="fr-find-title">What the analysis found</h3>
+      <p class="fine">Each finding is detected by the SQL — no names are hard-coded — and sized against peer branches or carriers, not an arbitrary target.</p>
+      <ol class="opp-list"></ol>
+    </section>
+
+    <section class="sql" aria-labelledby="fr-sql-title">
+      <div class="sql-head">
+        <div>
+          <h3 id="fr-sql-title">Query the data yourself</h3>
+          <p class="fine">
+            Runs DuckDB in your browser against all <span data-k="nShip">–</span> synthetic shipments
+            (<span data-k="pqSize">–</span> Parquet). Nothing is sent to a server. Table: <code>shipments</code>.
+          </p>
+        </div>
+        <button type="button" class="btn btn--primary btn--sm" data-act="load">Load SQL engine</button>
+      </div>
+      <div class="presets" role="group" aria-label="Example queries"></div>
+      <label class="visually-hidden" for="fr-sql-input">SQL query</label>
+      <textarea id="fr-sql-input" class="sql-input" spellcheck="false" rows="9"></textarea>
+      <div class="sql-bar">
+        <button type="button" class="btn btn--ghost btn--sm" data-act="run" disabled>Run query</button>
+        <span class="sql-hint">⌘/Ctrl + Enter</span>
+        <span class="sql-status" role="status" aria-live="polite"></span>
+      </div>
+      <details class="schema"><summary>Columns</summary><ul class="chips" data-k="schema"></ul></details>
+      <div class="table-wrap result-wrap" hidden><table class="data-table" data-table="result"></table></div>
+    </section>
+  </div>
+</section>
+
+<style>
+  .ratio-card { margin-top: 1rem; }
+  .ratio-note { margin: -0.25rem 0 0.5rem; }
+  .findings { margin-top: 2rem; }
+  .findings h3, .sql h3 { font-size: 1.15rem; margin-bottom: 0.25rem; }
+  .opp-list { list-style: none; padding: 0; margin-top: 1rem; display: grid; gap: 0.6rem; }
+  .opp-list :global(li) {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.2rem 1rem; align-items: baseline;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 0.85rem 1rem;
+  }
+  .opp-list :global(.o-title) { font-weight: 600; color: var(--ink); }
+  .opp-list :global(.o-amt) { font-family: var(--font-mono); font-size: 1.15rem; color: var(--ink); grid-row: span 2; align-self: center; }
+  .opp-list :global(.o-basis) { font-size: 0.84rem; color: var(--muted); }
+
+  .sql { margin-top: 2.25rem; padding-top: 1.75rem; border-top: 1px solid var(--line); }
+  .sql-head { display: flex; justify-content: space-between; align-items: start; gap: 1rem; flex-wrap: wrap; }
+  .presets { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1rem 0 0.6rem; }
+  .presets :global(button) {
+    font: inherit; font-size: 0.8rem; cursor: pointer; min-height: 32px;
+    padding: 0.3rem 0.75rem; border-radius: 999px; border: 1px solid var(--line-strong); background: transparent; color: var(--ink-2);
+  }
+  .presets :global(button[aria-pressed='true']) { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .sql-input {
+    width: 100%; font-family: var(--font-mono); font-size: 0.84rem; line-height: 1.5; color: var(--ink);
+    background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius-sm); padding: 0.75rem; resize: vertical;
+  }
+  .sql-input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .sql-bar { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.6rem; }
+  .sql-hint { font-size: 0.75rem; color: var(--muted); }
+  .sql-status { font-size: 0.82rem; color: var(--muted); }
+  .sql-status:global(.err) { color: #c2410c; }
+  .schema { margin-top: 0.6rem; font-size: 0.85rem; }
+  .schema summary { cursor: pointer; color: var(--accent); font-weight: 500; }
+  .schema .chips { margin-top: 0.5rem; }
+  .result-wrap { margin-top: 0.75rem; border: 1px solid var(--line); border-radius: var(--radius-sm); max-height: 360px; }
+  code { font-family: var(--font-mono); font-size: 0.86em; }
+</style>
+
+<script>
+  import { mountFreightDemo } from '../../lib/freight-demo';
+  document.querySelectorAll<HTMLElement>('.viz-root.freight').forEach((root) => mountFreightDemo(root));
+</script>

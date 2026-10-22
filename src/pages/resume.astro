@@ -1,0 +1,101 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { profile, skillGroups, resume } from '../data/profile';
+import { getProjects } from '../lib/projects';
+import { withBase } from '../lib/url';
+
+const projects = await getProjects();
+---
+<Base title="Résumé" description={`Résumé of ${profile.name}, ${profile.role}.`}>
+  <section class="section">
+    <div class="container resume">
+      <header class="r-head">
+        <div>
+          <p class="eyebrow">Résumé</p>
+          <h1 class="section-title">{profile.name}</h1>
+          <p class="sub">{profile.role} · {profile.location}</p>
+        </div>
+        <div class="r-actions">
+          {profile.links.resumePdf && (
+            <a class="btn btn--primary" href={withBase(profile.links.resumePdf)} download><Icon name="file" size={16} /> Download PDF</a>
+          )}
+          <a class="btn btn--ghost" href={profile.links.linkedin} target="_blank" rel="noopener noreferrer"><Icon name="linkedin" size={16} /> LinkedIn</a>
+        </div>
+      </header>
+
+      <section class="r-sec">
+        <h2>Summary</h2>
+        <p>{profile.intro}</p>
+      </section>
+
+      {resume.experience.length > 0 && (
+        <section class="r-sec">
+          <h2>Experience</h2>
+          {resume.experience.map((e) => (
+            <div class="entry">
+              <div class="entry-head"><h3>{e.role} · {e.org}</h3><span>{e.period}</span></div>
+              <ul>{e.points.map((p) => <li>{p}</li>)}</ul>
+            </div>
+          ))}
+        </section>
+      )}
+
+      <section class="r-sec">
+        <h2>Selected projects</h2>
+        <ul class="proj">
+          {projects.map((p) => (
+            <li><a href={withBase(`projects/${p.id}/`)}>{p.data.title}</a> — {p.data.summary}</li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="r-sec">
+        <h2>Skills</h2>
+        <dl class="skills">
+          {skillGroups.map((g) => (<div><dt>{g.title}</dt><dd>{g.items.join(' · ')}</dd></div>))}
+        </dl>
+      </section>
+
+      {resume.education.length > 0 && (
+        <section class="r-sec">
+          <h2>Education & training</h2>
+          {resume.education.map((e) => (
+            <div class="entry">
+              <div class="entry-head"><h3>{e.title} · {e.org}</h3>{e.period && <span>{e.period}</span>}</div>
+              {e.detail && <p>{e.detail}</p>}
+            </div>
+          ))}
+        </section>
+      )}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .resume { max-width: 860px; }
+  .r-head { display: flex; justify-content: space-between; align-items: end; gap: 1.5rem; flex-wrap: wrap; padding-bottom: 1.5rem; border-bottom: 1px solid var(--line); }
+  .sub { color: var(--muted); font-family: var(--font-mono); font-size: 0.9rem; }
+  .r-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+  .r-sec { padding-block: 1.75rem; border-bottom: 1px solid var(--line); }
+  .r-sec h2 { font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+  .r-sec > p { color: var(--ink-2); }
+  .entry + .entry { margin-top: 1.25rem; }
+  .entry-head { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .entry-head h3 { font-size: 1.02rem; }
+  .entry-head span { color: var(--muted); font-size: 0.88rem; }
+  .entry ul { padding-left: 1.2rem; color: var(--ink-2); margin-top: 0.4rem; }
+  .entry p { color: var(--muted); font-size: 0.93rem; margin-top: 0.2rem; }
+  .proj { padding-left: 1.2rem; color: var(--muted); font-size: 0.94rem; }
+  .proj li + li { margin-top: 0.5rem; }
+  .proj a { font-weight: 600; }
+  .skills { display: grid; gap: 0.75rem; }
+  .skills div { display: grid; grid-template-columns: 210px 1fr; gap: 1rem; }
+  .skills dt { font-weight: 600; }
+  .skills dd { color: var(--ink-2); }
+  @media (max-width: 600px) { .skills div { grid-template-columns: 1fr; gap: 0.1rem; } }
+  @media print {
+    :global(.site-header), :global(.site-footer), .r-actions { display: none !important; }
+    .section { padding-block: 0; }
+  }
+</style>

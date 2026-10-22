@@ -1,0 +1,55 @@
+---
+import Icon from './Icon.astro';
+import ProvenanceBadge from './ProvenanceBadge.astro';
+import { STATUS_LABEL, type Project } from '../lib/projects';
+import { withBase } from '../lib/url';
+
+interface Props { project: Project; headingLevel?: 'h2' | 'h3' }
+const { project, headingLevel = 'h3' } = Astro.props;
+const { data } = project;
+const href = withBase(`projects/${project.id}/`);
+const Heading = headingLevel;
+---
+<article class="card project" data-skills={data.skills.join('|')}>
+  <div class="top">
+    <span class="icon"><Icon name={data.icon} size={22} /></span>
+    <span class="category">{data.category}</span>
+    <ProvenanceBadge provenance={data.provenance} />
+  </div>
+  <Heading class="title"><a href={href}>{data.title}</a></Heading>
+  <p class="summary">{data.summary}</p>
+  <ul class="chips" aria-label="Tools">
+    {data.stack.slice(0, 5).map((s) => <li class="chip">{s}</li>)}
+  </ul>
+  <div class="foot">
+    <span class={`status status--${data.status}`}>{STATUS_LABEL[data.status]}</span>
+    <span class="read" aria-hidden="true">Read case study <Icon name="arrow" size={16} /></span>
+  </div>
+</article>
+
+<style>
+  .project {
+    position: relative; display: flex; flex-direction: column; gap: 0.9rem;
+    padding: clamp(20px, 3vw, 28px); transition: transform 0.2s, border-color 0.2s;
+  }
+  .project:hover { transform: translateY(-3px); border-color: var(--line-strong); }
+  .project:focus-within { border-color: var(--accent); }
+  .top { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+  .icon {
+    display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px;
+    background: var(--accent-soft); color: var(--accent);
+  }
+  .category { font-size: 0.8rem; font-weight: 600; color: var(--muted); margin-right: auto; }
+  .title { font-family: var(--font-serif); font-size: 1.35rem; font-weight: 700; }
+  .title a { color: var(--ink); text-decoration: none; }
+  /* Whole card is clickable via the title link. */
+  .title a::after { content: ''; position: absolute; inset: 0; border-radius: var(--radius); }
+  .summary { color: var(--muted); font-size: 0.95rem; flex: 1; }
+  .foot {
+    display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;
+    padding-top: 0.9rem; border-top: 1px solid var(--line); font-size: 0.82rem;
+  }
+  .status { color: var(--muted); }
+  .status--complete { color: var(--ok); }
+  .read { display: inline-flex; align-items: center; gap: 0.3rem; font-weight: 600; color: var(--accent); }
+</style>

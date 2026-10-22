@@ -1,0 +1,68 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { SKILLS } from '../../data/profile';
+import { getProjects } from '../../lib/projects';
+
+const projects = await getProjects();
+const used = SKILLS.filter((s) => projects.some((p) => p.data.skills.includes(s)));
+---
+<Base title="Projects" description="Data analytics, forecasting and machine-learning case studies by Austin Yu.">
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Portfolio</p>
+        <h1 class="section-title">Projects</h1>
+        <p class="section-lead">
+          Case studies across analytics, forecasting and machine learning. Work built on confidential data is shown
+          with synthetic or public stand-in data and labelled accordingly.
+        </p>
+      </div>
+
+      <div class="filters" role="group" aria-label="Filter projects by skill" hidden>
+        <button type="button" class="filter" data-filter="" aria-pressed="true">All</button>
+        {used.map((s) => <button type="button" class="filter" data-filter={s} aria-pressed="false">{s}</button>)}
+      </div>
+      <p class="count" aria-live="polite"></p>
+
+      <div class="grid grid--2" id="project-grid">
+        {projects.map((p) => <ProjectCard project={p} headingLevel="h2" />)}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+  .filter {
+    font: inherit; font-size: 0.85rem; font-weight: 500; cursor: pointer; min-height: 36px;
+    padding: 0.35rem 0.9rem; border-radius: 999px; border: 1px solid var(--line-strong);
+    background: transparent; color: var(--ink-2);
+  }
+  .filter:hover { border-color: var(--ink); }
+  .filter[aria-pressed='true'] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+  .count { color: var(--muted); font-size: 0.85rem; margin-bottom: 1.25rem; min-height: 1.3em; }
+</style>
+
+<script>
+  const group = document.querySelector<HTMLElement>('.filters');
+  const cards = [...document.querySelectorAll<HTMLElement>('#project-grid .project')];
+  const count = document.querySelector<HTMLElement>('.count');
+  if (group) {
+    group.hidden = false; // filters only make sense with JS; without it every card shows
+    const apply = (skill: string) => {
+      let shown = 0;
+      for (const card of cards) {
+        const match = !skill || (card.dataset.skills ?? '').split('|').includes(skill);
+        card.hidden = !match;
+        if (match) shown++;
+      }
+      group.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === skill)));
+      if (count) count.textContent = skill ? `${shown} project${shown === 1 ? '' : 's'} using ${skill}` : '';
+    };
+    group.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest('button');
+      if (btn) apply(btn.dataset.filter ?? '');
+    });
+  }
+</script>

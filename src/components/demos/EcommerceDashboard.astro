@@ -1,0 +1,97 @@
+---
+import { withBase } from '../../lib/url';
+const dataUrl = withBase('data/ecommerce.json');
+---
+<section class="viz-root demo ecommerce" data-src={dataUrl} aria-labelledby="ec-demo-title">
+  <div class="demo-head">
+    <p class="eyebrow">Interactive dashboard · public dataset</p>
+    <h2 id="ec-demo-title">Olist marketplace dashboard</h2>
+    <p class="demo-lead">
+      Twenty complete months of a Brazilian marketplace (Jan 2017 – Aug 2018), modelled in SQL from nine raw tables.
+      Switch metrics on each chart; the middle row is the main finding.
+    </p>
+  </div>
+  <p class="status" role="status" aria-live="polite">Loading data…</p>
+
+  <div class="ec-body" hidden>
+    <div class="tiles">
+      <div class="tile"><span class="t-label">Product revenue</span><span class="t-value" data-k="gmv">–</span><span class="t-note" data-k="gmvNote"></span></div>
+      <div class="tile"><span class="t-label">Delivered late</span><span class="t-value" data-k="late">–</span><span class="t-note" data-k="lateNote"></span></div>
+      <div class="tile"><span class="t-label">Average review</span><span class="t-value" data-k="rev">–</span><span class="t-note" data-k="revNote"></span></div>
+      <div class="tile"><span class="t-label">Customers who ordered again</span><span class="t-value" data-k="rep">–</span><span class="t-note" data-k="repNote"></span></div>
+    </div>
+
+    <figure class="chart-card">
+      <figcaption>
+        <span class="chart-title">Monthly trend</span>
+        <div class="toggle" role="group" aria-label="Monthly metric" data-toggle="monthly">
+          <button type="button" data-v="gmv" aria-pressed="true">Revenue</button>
+          <button type="button" data-v="orders" aria-pressed="false">Orders</button>
+          <button type="button" data-v="late_rate" aria-pressed="false">Late rate</button>
+          <button type="button" data-v="avg_review" aria-pressed="false">Avg review</button>
+        </div>
+      </figcaption>
+      <div class="chart" data-chart="monthly" aria-hidden="true"></div>
+      <div class="tooltip" role="tooltip" hidden></div>
+    </figure>
+
+    <div class="lower">
+      <figure class="chart-card">
+        <figcaption>
+          <span class="chart-title">Average review by delivery date vs promise</span>
+          <span class="sub">days early (−) or late (+) · tails pooled</span>
+        </figcaption>
+        <div class="chart" data-chart="cliff" aria-hidden="true"></div>
+        <div class="tooltip" role="tooltip" hidden></div>
+        <p class="fine" data-k="cliffNote"></p>
+      </figure>
+      <figure class="chart-card">
+        <figcaption>
+          <span class="chart-title">What predicts a 1–2★ review</span>
+          <span class="sub">logistic regression · odds ratio with 95% CI · log scale</span>
+        </figcaption>
+        <div class="chart" data-chart="forest"></div>
+        <p class="fine" data-k="forestNote"></p>
+      </figure>
+    </div>
+
+    <div class="lower">
+      <figure class="chart-card">
+        <figcaption>
+          <span class="chart-title">By customer state</span>
+          <div class="toggle" role="group" aria-label="State metric" data-toggle="states">
+            <button type="button" data-v="late_rate" aria-pressed="true">Late rate</button>
+            <button type="button" data-v="median_delivery_days" aria-pressed="false">Delivery days</button>
+            <button type="button" data-v="avg_review" aria-pressed="false">Avg review</button>
+          </div>
+        </figcaption>
+        <div class="bars" data-chart="states"></div>
+        <div class="tooltip" role="tooltip" hidden></div>
+        <p class="fine">States with at least 300 orders. Dashed line = all states.</p>
+      </figure>
+      <figure class="chart-card">
+        <figcaption>
+          <span class="chart-title">By product category</span>
+          <div class="toggle" role="group" aria-label="Category metric" data-toggle="categories">
+            <button type="button" data-v="revenue" aria-pressed="true">Revenue</button>
+            <button type="button" data-v="avg_review" aria-pressed="false">Avg review</button>
+            <button type="button" data-v="freight_ratio" aria-pressed="false">Freight share</button>
+          </div>
+        </figcaption>
+        <div class="bars" data-chart="categories"></div>
+        <div class="tooltip" role="tooltip" hidden></div>
+        <p class="fine" data-k="catNote"></p>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<style>
+  .chart-card :global(.forest-row) { cursor: default; }
+  .lower { margin-top: 1rem; }
+</style>
+
+<script>
+  import { mountEcommerceDemo } from '../../lib/ecommerce-demo';
+  document.querySelectorAll<HTMLElement>('.viz-root.ecommerce').forEach((root) => mountEcommerceDemo(root));
+</script>

@@ -1,0 +1,87 @@
+---
+import { withBase } from '../../lib/url';
+const dataUrl = withBase('data/segmentation.json');
+---
+<section class="viz-root demo segmentation" data-src={dataUrl} aria-labelledby="seg-demo-title">
+  <div class="demo-head">
+    <p class="eyebrow">Interactive analysis · public dataset</p>
+    <h2 id="seg-demo-title">Customer segment explorer</h2>
+    <p class="demo-lead">
+      4,320 customers of a UK online retailer, segmented on recency, frequency and net spend. Select a segment to
+      highlight its customers; the panels below test whether the segments predict what customers did next.
+    </p>
+  </div>
+  <p class="status" role="status" aria-live="polite">Loading data…</p>
+
+  <div class="seg-body" hidden>
+    <div class="seg-cards" role="group" aria-label="Segments"></div>
+
+    <div class="seg-grid">
+      <figure class="chart-card">
+        <figcaption>
+          <span class="chart-title">Orders vs net spend per customer</span>
+          <span class="sub">log scales · <span data-k="selName">–</span> highlighted</span>
+        </figcaption>
+        <div class="chart" data-chart="scatter" aria-hidden="true"></div>
+        <div class="tooltip" role="tooltip" hidden></div>
+      </figure>
+      <figure class="chart-card">
+        <figcaption>
+          <span class="chart-title">Bought again after the cutoff</span>
+          <span class="sub" data-k="holdSub"></span>
+        </figcaption>
+        <div class="bars" data-chart="holdout"></div>
+        <div class="tooltip" role="tooltip" hidden></div>
+        <p class="fine" data-k="holdNote"></p>
+      </figure>
+    </div>
+
+    <figure class="chart-card cohort-card">
+      <figcaption>
+        <span class="chart-title">Monthly cohort retention</span>
+        <span class="sub">share of each month's new customers who bought again k months later</span>
+      </figcaption>
+      <div class="table-wrap cohort-wrap"><table class="data-table cohort" data-table="cohort"></table></div>
+      <p class="fine">Complete months only — the data ends on 9 December 2011, so that partial month is left out. The December 2010 cohort is inflated: the data starts that month, so it includes long-standing customers seen for the first time. Every cohort peaks in November, the pre-Christmas season.</p>
+    </figure>
+
+    <figure class="chart-card sel-card">
+      <figcaption>
+        <span class="chart-title">Choosing the number of segments</span>
+        <ul class="legend" aria-label="Legend">
+          <li><span class="sw" style="border-color: var(--series-1)"></span>Silhouette (separation)</li>
+          <li><span class="sw" style="border-color: var(--series-2)"></span>Stability (bootstrap ARI)</li>
+        </ul>
+      </figcaption>
+      <div class="chart" data-chart="selection" aria-hidden="true"></div>
+      <div class="tooltip" role="tooltip" hidden></div>
+      <p class="fine" data-k="selNote"></p>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .seg-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 0.75rem; margin: 1.25rem 0 1rem; }
+  .seg-cards :global(button) {
+    text-align: left; font: inherit; color: var(--ink-2); cursor: pointer; display: grid; gap: 0.25rem; align-content: start;
+    background: var(--surface); border: 1.5px solid var(--line); border-radius: var(--radius); padding: 0.85rem 1rem;
+  }
+  .seg-cards :global(button:hover) { border-color: var(--line-strong); }
+  .seg-cards :global(button[aria-pressed='true']) { border-color: var(--series-1); box-shadow: 0 0 0 1px var(--series-1) inset; }
+  .seg-cards :global(.sc-name) { font-weight: 700; color: var(--ink); }
+  .seg-cards :global(.sc-big) { font-size: 0.95rem; font-weight: 600; color: var(--ink); }
+  .seg-cards :global(.sc-meta), .seg-cards :global(.sc-act) { font-size: 0.78rem; color: var(--muted); }
+  .seg-cards :global(.sc-act) { color: var(--ink-2); }
+  .seg-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 1rem; align-items: start; }
+  @media (max-width: 900px) { .seg-grid { grid-template-columns: minmax(0, 1fr); } }
+  .cohort-card, .sel-card { margin-top: 1rem; }
+  .cohort-wrap { max-height: none; }
+  .cohort :global(td) { font-size: 0.78rem; padding: 0.35rem 0.4rem; text-align: center; min-width: 2.6rem; }
+  .cohort :global(th) { font-size: 0.76rem; text-align: center; }
+  .cohort :global(td:first-child), .cohort :global(th:first-child) { text-align: left; }
+</style>
+
+<script>
+  import { mountSegmentationDemo } from '../../lib/segmentation-demo';
+  document.querySelectorAll<HTMLElement>('.viz-root.segmentation').forEach((root) => mountSegmentationDemo(root));
+</script>

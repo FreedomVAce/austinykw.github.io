@@ -1,0 +1,83 @@
+/* Shared styles for interactive demos (.viz-root). Chart colour tokens live in global.css. */
+
+.viz-root.demo { padding-block: clamp(36px, 6vw, 56px); }
+.viz-root .demo-head h2 { font-size: clamp(1.6rem, 3.5vw, 2.1rem); margin-bottom: 0.5rem; }
+.viz-root .demo-lead { color: var(--muted); max-width: 70ch; }
+
+/* Controls */
+.viz-root .controls {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr));
+  gap: 0.9rem 1rem; margin: 1.5rem 0 1rem; align-items: end;
+}
+.viz-root .controls label { min-width: 0; display: grid; gap: 0.3rem; font-size: 0.8rem; font-weight: 600; color: var(--ink-2); }
+.viz-root .controls select {
+  font: inherit; font-size: 0.9rem; font-weight: 400; color: var(--ink); background: var(--surface);
+  border: 1px solid var(--line-strong); border-radius: var(--radius-sm); padding: 0.5rem 0.6rem; min-height: 40px;
+  width: 100%; min-width: 0; text-overflow: ellipsis;
+}
+.viz-root .range output { font-family: var(--font-mono); font-weight: 500; color: var(--text-primary); margin-left: 0.25rem; }
+.viz-root .range input { width: 100%; accent-color: var(--accent); min-height: 28px; }
+.viz-root .status { color: var(--muted); font-size: 0.9rem; min-height: 1.2em; }
+
+/* KPI tiles */
+.viz-root .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); gap: 0.75rem; margin-bottom: 1rem; }
+.viz-root .tile { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 0.9rem 1rem; display: grid; gap: 0.15rem; align-content: start; }
+.viz-root .t-label { font-size: 0.78rem; color: var(--muted); }
+.viz-root .t-value { font-family: var(--font-mono); font-size: 1.55rem; font-weight: 500; color: var(--text-primary); }
+.viz-root .t-note { font-size: 0.78rem; color: var(--muted); }
+
+/* Chart cards */
+.viz-root .chart-card { position: relative; background: var(--surface-1); border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem 1rem 0.75rem; margin: 0; min-width: 0; }
+.viz-root .chart-card figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 1rem; align-items: baseline; margin-bottom: 0.5rem; }
+.viz-root .chart-title { font-weight: 600; font-size: 0.95rem; color: var(--text-primary); }
+.viz-root .sub { font-size: 0.78rem; color: var(--text-secondary); }
+.viz-root .legend { display: flex; flex-wrap: wrap; gap: 0.35rem 1rem; list-style: none; padding: 0; font-size: 0.8rem; color: var(--text-secondary); }
+.viz-root .legend li { display: inline-flex; align-items: center; gap: 0.4rem; }
+.viz-root .sw { display: inline-block; width: 18px; height: 0; border-top: 2px solid; }
+.viz-root .chart, .viz-root .bars { width: 100%; touch-action: pan-y; }
+.viz-root .chart svg, .viz-root .bars svg { width: 100%; height: auto; overflow: visible; }
+.viz-root .grid line { stroke: var(--grid); stroke-width: 1; }
+.viz-root svg text { fill: var(--text-secondary); font-size: 11px; font-family: var(--font-sans); }
+.viz-root svg .now-label, .viz-root svg .direct-label { fill: var(--text-primary); font-weight: 600; }
+.viz-root svg .cross { stroke: var(--text-secondary); stroke-width: 1; }
+.viz-root svg .ref { stroke: var(--text-secondary); stroke-dasharray: 4 3; }
+
+/* Horizontal bars */
+.viz-root .bars .bar { fill: var(--series-1); transition: opacity 0.15s; }
+.viz-root .bars .bar.sel { stroke: var(--text-primary); stroke-width: 2; }
+.viz-root .bars .lbl-sel { fill: var(--text-primary); font-weight: 600; }
+.viz-root .bars .base { stroke: var(--text-secondary); stroke-dasharray: 4 3; }
+.viz-root .bars g.row:hover .bar { opacity: 0.8; }
+.viz-root .bars g.row:hover text { fill: var(--text-primary); }
+
+/* Tooltip */
+.viz-root .tooltip {
+  position: absolute; pointer-events: none; z-index: 5; min-width: 170px;
+  background: var(--surface-1); border: 1px solid var(--line-strong); border-radius: var(--radius-sm);
+  box-shadow: var(--shadow); padding: 0.55rem 0.7rem; font-size: 0.8rem; color: var(--text-primary);
+}
+.viz-root .tooltip .tt-h { font-weight: 600; margin-bottom: 0.25rem; }
+.viz-root .tooltip .tt-row { display: flex; justify-content: space-between; gap: 1rem; align-items: center; }
+.viz-root .tooltip .tt-row span:first-child { display: inline-flex; align-items: center; gap: 0.35rem; color: var(--text-secondary); }
+.viz-root .tooltip .tt-row b { font-family: var(--font-mono); font-weight: 500; }
+
+/* Table view */
+.viz-root .table-view { margin-top: 0.5rem; font-size: 0.85rem; }
+.viz-root .table-view summary { cursor: pointer; color: var(--accent); font-weight: 500; padding: 0.25rem 0; }
+.viz-root .table-wrap { max-height: 320px; overflow: auto; margin-top: 0.5rem; }
+.viz-root .data-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 0.85rem; }
+.viz-root .data-table th, .viz-root .data-table td { text-align: right; padding: 0.3rem 0.6rem; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.viz-root .data-table th:first-child, .viz-root .data-table td:first-child { text-align: left; }
+.viz-root .data-table thead th { position: sticky; top: 0; background: var(--surface-1); color: var(--text-primary); }
+
+/* Segmented toggle (metric pickers) */
+.viz-root .toggle { display: inline-flex; flex-wrap: wrap; gap: 0.3rem; }
+.viz-root .toggle button {
+  font: inherit; font-size: 0.78rem; cursor: pointer; min-height: 30px; padding: 0.2rem 0.65rem;
+  border-radius: 999px; border: 1px solid var(--line-strong); background: transparent; color: var(--ink-2);
+}
+.viz-root .toggle button[aria-pressed='true'] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+/* Layout helpers */
+.viz-root .lower { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 1rem; margin-top: 1rem; align-items: start; }
+.viz-root .fine { font-size: 0.78rem; color: var(--muted); margin-top: 0.75rem; }
