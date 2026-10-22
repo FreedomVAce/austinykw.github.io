@@ -53,7 +53,7 @@ const dataUrl = withBase('data/face-emotion.json');
       </figure>
     </div>
 
-    <div class="lower">
+    <div class="lower cm-row">
       <figure class="chart-card">
         <figcaption>
           <span class="chart-title">Confusion matrix</span>
@@ -87,8 +87,10 @@ const dataUrl = withBase('data/face-emotion.json');
   .task-toggle { margin: 1.25rem 0 0.5rem; }
   .task-toggle :global(button) { font-size: 0.85rem; min-height: 38px; padding: 0.3rem 0.95rem; }
   .cm-axis { margin: -0.25rem 0 0.5rem !important; }
+  @media (min-width: 900px) { .viz-root .cm-row { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); } }
+  .cm :global(table), .cm { width: 100%; }
   .cm-wrap { max-height: none; }
-  .cm :global(td) { text-align: center !important; font-size: 0.8rem; min-width: 2.8rem; padding: 0.45rem 0.35rem; }
+  .cm :global(td) { text-align: center !important; font-size: 0.78rem; padding: 0.45rem 0.25rem; }
   .cm :global(th) { font-size: 0.75rem; text-align: center !important; }
   .cm :global(tbody th) { text-align: right !important; padding-right: 0.5rem; }
   .cm :global(td.diag) { outline: 2px solid var(--text-primary); outline-offset: -2px; font-weight: 700; }
