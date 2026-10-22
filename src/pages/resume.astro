@@ -1,129 +1,192 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
-import { profile, skillGroups, resume } from '../data/profile';
-import { getProjects } from '../lib/projects';
+import { profile, resume } from '../data/profile';
 import { withBase } from '../lib/url';
 
-const projects = await getProjects();
+const { linkedin, github, email, resumePdf } = profile.links;
+const strip = (u: string) => u.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
 ---
 <Base title="Résumé" description={`Résumé of ${profile.name}, ${profile.role}.`}>
-  <section class="section">
-    <div class="container resume">
-      <header class="r-head">
-        <div>
-          <p class="eyebrow">Résumé</p>
-          <h1 class="section-title">{profile.name}</h1>
-          <p class="sub">{profile.role} · {profile.location}</p>
-        </div>
-        <div class="r-actions">
-          {profile.links.resumePdf && (
-            <a class="btn btn--primary" href={withBase(profile.links.resumePdf)} download><Icon name="file" size={16} /> Download PDF</a>
-          )}
-          <a class="btn btn--ghost" href={profile.links.linkedin} target="_blank" rel="noopener noreferrer"><Icon name="linkedin" size={16} /> LinkedIn</a>
-        </div>
-      </header>
+  <section class="section resume-page">
+    <div class="container">
+      <div class="actions">
+        <button type="button" class="btn btn--primary btn--sm" id="print-resume"><Icon name="file" size={16} /> Save as PDF</button>
+        {resumePdf && <a class="btn btn--ghost btn--sm" href={withBase(resumePdf)} download>Download PDF</a>}
+      </div>
 
-      <section class="r-sec">
-        <h2>Summary</h2>
-        <p>{profile.intro}</p>
-        {profile.links.email && (
-          <p class="contact-line"><Icon name="mail" size={14} /> <a href={`mailto:${profile.links.email}`}>{profile.links.email}</a> · <Icon name="pin" size={14} /> {profile.location}</p>
-        )}
-      </section>
+      <article class="sheet" aria-label={`Résumé of ${profile.name}`}>
+        <header class="band">
+          <h1>{profile.name}</h1>
+          <p class="title">{profile.role.replace(' · ', ' & ')}</p>
+        </header>
 
-      {resume.experience.length > 0 && (
-        <section class="r-sec">
-          <h2>Experience</h2>
-          {resume.experience.map((e) => (
-            <div class="entry">
-              <div class="entry-head"><h3>{e.role}</h3><span>{e.period}</span></div>
-              <p class="org">{e.org} · {e.location}{e.note && <> · <em>{e.note}</em></>}</p>
-              <ul>
-                {e.points.map((pt) => typeof pt === 'string'
-                  ? <li>{pt}</li>
-                  : <li>{pt.text} <a class="cs-link" href={withBase(pt.href)}>{pt.label ?? 'Case study'} →</a></li>)}
+        <div class="cols">
+          <aside class="side">
+            <section>
+              <h2>Contact</h2>
+              <ul class="contact">
+                {email && <li><Icon name="mail" size={15} /><a href={`mailto:${email}`}>{email}</a></li>}
+                <li><Icon name="linkedin" size={15} /><a href={linkedin} target="_blank" rel="noopener noreferrer">{strip(linkedin)}</a></li>
+                <li><Icon name="github" size={15} /><a href={github} target="_blank" rel="noopener noreferrer">{strip(github)}</a></li>
+                <li><Icon name="pin" size={15} /><span>{profile.location}</span></li>
               </ul>
-            </div>
-          ))}
-        </section>
-      )}
+            </section>
 
-      <section class="r-sec">
-        <h2>Selected projects</h2>
-        <ul class="proj">
-          {projects.map((p) => (
-            <li><a href={withBase(`projects/${p.id}/`)}>{p.data.title}</a> — {p.data.summary}</li>
-          ))}
-        </ul>
-      </section>
+            {resume.education.length > 0 && (
+              <section>
+                <h2>Education</h2>
+                {resume.education.map((e) => (
+                  <div class="item">
+                    <strong>{e.title}</strong>
+                    <span>{e.org}</span>
+                    {e.period && <span class="when">{e.period}</span>}
+                  </div>
+                ))}
+              </section>
+            )}
 
-      <section class="r-sec">
-        <h2>Skills</h2>
-        <dl class="skills">
-          {skillGroups.map((g) => (<div><dt>{g.title}</dt><dd>{g.items.join(' · ')}</dd></div>))}
-        </dl>
-      </section>
+            {resume.certifications.length > 0 && (
+              <section>
+                <h2>Certifications<br />and Licenses</h2>
+                {resume.certifications.map((e) => (
+                  <div class="item">
+                    <strong>{e.title}</strong>
+                    <span>{e.org}</span>
+                    {e.period && <span class="when">{e.period}</span>}
+                  </div>
+                ))}
+              </section>
+            )}
 
-      {resume.education.length > 0 && (
-        <section class="r-sec">
-          <h2>Education</h2>
-          {resume.education.map((e) => (
-            <div class="entry">
-              <div class="entry-head"><h3>{e.title}</h3>{e.period && <span>{e.period}</span>}</div>
-              <p class="org">{e.org}</p>
-              {e.detail && <p>{e.detail}</p>}
-            </div>
-          ))}
-        </section>
-      )}
+            <section>
+              <h2>Skills</h2>
+              {resume.skills.map((s) => (
+                <p class="skill"><strong>{s.label}:</strong> {s.items}</p>
+              ))}
+            </section>
+          </aside>
 
-      {resume.certifications.length > 0 && (
-        <section class="r-sec">
-          <h2>Certifications</h2>
-          {resume.certifications.map((e) => (
-            <div class="entry">
-              <div class="entry-head"><h3>{e.title} · {e.org}</h3>{e.period && <span>{e.period}</span>}</div>
-              {e.detail && <p>{e.detail}</p>}
-            </div>
-          ))}
-        </section>
-      )}
+          <div class="main">
+            <section>
+              <h2>Profile</h2>
+              {resume.profile.map((p) => <p class="profile">{p}</p>)}
+            </section>
+
+            {resume.experience.length > 0 && (
+              <section>
+                <h2>Work Experience</h2>
+                {resume.experience.map((e) => (
+                  <div class="job">
+                    <h3>{e.role}</h3>
+                    <div class="job-meta">
+                      <span>{e.org}, {e.location}</span>
+                      <span class="when">{e.period}</span>
+                    </div>
+                    {e.note && <p class="note">{e.note}</p>}
+                    <ul>
+                      {e.points.map((pt) => typeof pt === 'string'
+                        ? <li>{pt}</li>
+                        : <li>{pt.text} <a class="cs-link" href={withBase(pt.href)}>{pt.label ?? 'Case study'} →</a></li>)}
+                    </ul>
+                  </div>
+                ))}
+              </section>
+            )}
+          </div>
+        </div>
+      </article>
     </div>
   </section>
 </Base>
 
 <style>
-  .resume { max-width: 860px; }
-  .r-head { display: flex; justify-content: space-between; align-items: end; gap: 1.5rem; flex-wrap: wrap; padding-bottom: 1.5rem; border-bottom: 1px solid var(--line); }
-  .sub { color: var(--muted); font-family: var(--font-mono); font-size: 0.9rem; }
-  .r-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
-  .r-sec { padding-block: 1.75rem; border-bottom: 1px solid var(--line); }
-  .r-sec h2 { font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
-  .r-sec > p { color: var(--ink-2); }
-  .entry + .entry { margin-top: 1.25rem; }
-  .entry-head { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-  .entry-head h3 { font-size: 1.02rem; }
-  .entry-head span { color: var(--muted); font-size: 0.88rem; }
-  .entry ul { padding-left: 1.2rem; color: var(--ink-2); margin-top: 0.4rem; }
-  .entry p { color: var(--muted); font-size: 0.93rem; margin-top: 0.2rem; }
-  .entry .org { font-size: 0.88rem; color: var(--muted); margin-top: 0.1rem; }
-  .entry ul li + li { margin-top: 0.3rem; }
-  .cs-link { font-size: 0.82rem; font-weight: 600; white-space: nowrap; text-decoration: none; }
+  .resume-page { padding-top: clamp(24px, 4vw, 40px); }
+  .resume-page {
+    --band: #86b6ef; --band-ink: #3a3f47; --side: #f3f3f3; --rule: #b9bcc2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .resume-page { --band: #1f4f86; --band-ink: #eef0f3; --side: #171a1f; --rule: #3a404a; }
+  }
+  :global(:root[data-theme='dark']) .resume-page { --band: #1f4f86; --band-ink: #eef0f3; --side: #171a1f; --rule: #3a404a; }
+
+  .actions { display: flex; justify-content: flex-end; gap: 0.5rem; max-width: 900px; margin: 0 auto 0.75rem; }
+  .sheet { max-width: 900px; margin: 0 auto; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); overflow: hidden; }
+
+  .band { background: var(--band); color: var(--band-ink); text-align: center; padding: clamp(28px, 5vw, 44px) 1rem clamp(22px, 4vw, 32px); }
+  .band h1 { font-family: var(--font-sans); font-weight: 400; color: var(--band-ink); font-size: clamp(1.9rem, 5vw, 2.8rem); letter-spacing: 0.32em; text-transform: uppercase; margin-right: -0.32em; }
+  .band .title { margin-top: 0.6rem; font-size: 0.9rem; letter-spacing: 0.3em; text-transform: uppercase; margin-right: -0.3em; }
+
+  .cols { display: grid; grid-template-columns: 32% minmax(0, 1fr); }
+  .side { background: var(--side); padding: 1.6rem 1.4rem; }
+  .main { padding: 1.6rem 1.8rem; }
+  .side section + section, .main section + section { border-top: 1.5px dashed var(--rule); margin-top: 1.3rem; padding-top: 1.3rem; }
+
+  h2 { font-family: var(--font-sans); font-weight: 500; font-size: 0.95rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ink); margin-bottom: 0.9rem; }
+
+  .contact { list-style: none; padding: 0; display: grid; gap: 0.6rem; font-size: 0.86rem; }
+  .contact li { display: flex; align-items: center; gap: 0.55rem; color: var(--ink-2); overflow-wrap: anywhere; }
+  .contact :global(svg) { flex: none; color: var(--muted); }
+  .contact a { color: var(--ink-2); text-decoration: none; }
+  .contact a:hover { color: var(--accent); text-decoration: underline; }
+
+  .item { display: grid; gap: 0.05rem; font-size: 0.86rem; color: var(--ink-2); }
+  .item + .item { margin-top: 0.9rem; }
+  .item strong { color: var(--ink); font-weight: 600; }
+  .when { color: var(--muted); font-size: 0.82rem; }
+  .skill { font-size: 0.84rem; color: var(--ink-2); line-height: 1.5; }
+  .skill + .skill { margin-top: 0.55rem; }
+  .skill strong { color: var(--ink); }
+
+  .profile { font-size: 0.92rem; color: var(--ink-2); }
+  .profile + .profile { margin-top: 0.5rem; }
+  .job + .job { margin-top: 1.15rem; }
+  .job h3 { font-size: 1rem; font-weight: 600; color: var(--ink); }
+  .job-meta { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; font-size: 0.8rem; color: var(--muted); margin: 0.1rem 0 0.4rem; }
+  .note { font-size: 0.8rem; font-style: italic; color: var(--muted); margin: -0.25rem 0 0.4rem; }
+  .job ul { padding-left: 1.2rem; display: grid; gap: 0.3rem; font-size: 0.88rem; color: var(--ink-2); }
+  .cs-link { font-size: 0.78rem; font-weight: 600; white-space: nowrap; text-decoration: none; }
   .cs-link:hover { text-decoration: underline; }
-  .contact-line { display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap; margin-top: 0.6rem; font-size: 0.92rem; color: var(--muted); }
-  .r-sec + .r-sec { break-inside: auto; }
-  @media print { .cs-link { display: none; } }
-  .proj { padding-left: 1.2rem; color: var(--muted); font-size: 0.94rem; }
-  .proj li + li { margin-top: 0.5rem; }
-  .proj a { font-weight: 600; }
-  .skills { display: grid; gap: 0.75rem; }
-  .skills div { display: grid; grid-template-columns: 210px 1fr; gap: 1rem; }
-  .skills dt { font-weight: 600; }
-  .skills dd { color: var(--ink-2); }
-  @media (max-width: 600px) { .skills div { grid-template-columns: 1fr; gap: 0.1rem; } }
+
+  @media (max-width: 760px) {
+    .cols { grid-template-columns: minmax(0, 1fr); }
+    .side { order: 2; border-top: 1.5px dashed var(--rule); }
+    .main, .side { padding: 1.3rem 1.1rem; }
+  }
+
+  /* Print / "Save as PDF": a two-column letter-size résumé like the original document. */
   @media print {
-    :global(.site-header), :global(.site-footer), .r-actions { display: none !important; }
-    .section { padding-block: 0; }
+    @page { size: letter; margin: 0.4in; }
+    :global(html), :global(body) { background: #fff !important; }
+    :global(.site-header), :global(.site-footer), :global(.skip-link), .actions, .cs-link { display: none !important; }
+    .resume-page { padding: 0 !important; --band: #86b6ef; --band-ink: #3a3f47; --side: #f3f3f3; --rule: #b9bcc2; }
+    .resume-page :global(.container) { padding: 0 !important; max-width: none !important; }
+    .sheet { border: 0; box-shadow: none; max-width: none; }
+    .sheet, .sheet * { color-adjust: exact; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .sheet { --ink: #1f2328; --ink-2: #3d424c; --muted: #5f6672; --surface: #fff; }
+    .cols { grid-template-columns: 32% 1fr !important; }
+    .side { order: 0 !important; border-top: 0 !important; }
+    /* Compact print typography so the résumé fits two pages, like the original. */
+    .sheet { font-size: 9pt; line-height: 1.35; }
+    .band { padding: 20pt 0 14pt; }
+    .band h1 { font-size: 24pt; }
+    .band .title { font-size: 8.5pt; margin-top: 4pt; }
+    .side, .main { padding: 14pt 14pt; }
+    .side section + section, .main section + section { margin-top: 10pt; padding-top: 10pt; }
+    h2 { font-size: 9.5pt; margin-bottom: 6pt; break-after: avoid; }
+    .contact { gap: 4pt; font-size: 8.5pt; }
+    .item, .skill, .profile, .job ul, .when, .job-meta, .note { font-size: 8.5pt; }
+    .item + .item { margin-top: 6pt; }
+    .skill + .skill { margin-top: 3pt; }
+    .job + .job { margin-top: 8pt; }
+    .job h3 { font-size: 10pt; break-after: avoid; }
+    .job-meta { margin: 0 0 2pt; break-after: avoid; }
+    .job ul { gap: 1.5pt; }
+    .job li { break-inside: avoid; }
+    .contact a { color: #3d424c !important; }
   }
 </style>
+
+<script>
+  document.getElementById('print-resume')?.addEventListener('click', () => window.print());
+</script>

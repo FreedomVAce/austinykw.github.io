@@ -88,10 +88,31 @@ export type Bullet = string | { text: string; href: string; label?: string };
  * Project bullets stay generic: no internal system names, client names or confidential figures.
  */
 export const resume: {
+  /** Profile paragraph(s) at the top of the résumé. */
+  profile: string[];
   experience: { role: string; org: string; location: string; period: string; note?: string; points: Bullet[] }[];
   education: { title: string; org: string; period?: string; detail?: string }[];
   certifications: { title: string; org: string; period?: string; detail?: string }[];
+  /** Sidebar skills, in the résumé's own categories. */
+  skills: { label: string; items: string }[];
 } = {
+  profile: [
+    "I'm passionate about harnessing the power of data to uncover insights and drive meaningful change. With a strong foundation in mathematics and experience in predictive modelling, data processing and machine learning, I turn raw data into compelling stories — and, increasingly, into models running in production.",
+    "I'm always eager to tackle new challenges and find creative solutions with data. Building models with high precision and accuracy is what drives me forward as a data analyst and machine learning developer.",
+  ],
+  skills: [
+    { label: 'Databases', items: 'SQL, SSMS, SSAS, SSRS, DuckDB' },
+    { label: 'Programming', items: 'Python (pandas, NumPy, SciPy), Visual Studio, MATLAB' },
+    { label: 'Machine Learning', items: 'scikit-learn, forecasting, supervised & unsupervised learning, recommender systems, LLM classification' },
+    { label: 'Neural Networks', items: 'TensorFlow, Keras, PyTorch' },
+    { label: 'NLP', items: 'NLTK, spaCy' },
+    { label: 'Model Serving', items: 'FastAPI, Docker, API integration' },
+    { label: 'Statistics', items: 'Hypothesis testing, A/B tests, regression, backtesting' },
+    { label: 'Big Data', items: 'AWS, Hadoop, Spark, Hive' },
+    { label: 'Data Visualization', items: 'Power BI (Power Query, DAX, data modelling, publishing), Dundas BI, Tableau, Matplotlib, Seaborn, Bokeh, Plotly' },
+    { label: 'Microsoft Office', items: 'Excel, Access, Word, PowerPoint' },
+    { label: 'Project Tools', items: 'Jira (Agile), Figma, Git & GitHub' },
+  ],
   experience: [
     {
       role: 'Junior Machine Learning Developer',
