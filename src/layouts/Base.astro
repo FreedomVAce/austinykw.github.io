@@ -13,7 +13,7 @@ interface Props {
 }
 const { title, description = `${profile.name} — ${profile.role}. ${profile.tagline}`, image = profile.photo } = Astro.props;
 const fullTitle = title ? `${title} · ${profile.name}` : `${profile.name} · ${profile.role}`;
-const canonical = new URL(Astro.url.pathname, Astro.site);
+const canonical = new URL(Astro.url.pathname.replace(/\/?$/, '/'), Astro.site);
 const ogImage = new URL(withBase(image), Astro.site);
 ---
 <!doctype html>
@@ -24,6 +24,7 @@ const ogImage = new URL(withBase(image), Astro.site);
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <link rel="sitemap" href={withBase('sitemap.xml')} />
     <link rel="icon" type="image/svg+xml" href={withBase('favicon.svg')} />
     <meta name="theme-color" content="#17191e" />
     <meta property="og:type" content="website" />
