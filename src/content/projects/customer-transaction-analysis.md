@@ -10,6 +10,8 @@ role: Data cleaning, segmentation, validation and write-up
 data: Public dataset — UCI Online Retail, 541,909 invoice lines, Dec 2010 – Dec 2011
 stack: [SQL, DuckDB, Python, scikit-learn]
 skills: [SQL, Python, Machine Learning, Customer Analytics, Statistics]
+links:
+  repo: https://github.com/FreedomVAce/customer-segmentation-demo
 demo: segmentation
 glance:
   problem: A retailer treated every customer the same. It needed to know who its most valuable customers are, who is drifting away, and whether a segmentation would hold up in practice.
