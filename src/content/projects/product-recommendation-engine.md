@@ -2,7 +2,7 @@
 title: Product Recommendation Engine
 summary: '"Often bought with" and cart recommendations for a B2B supplier, built to raise basket size — blending four signals and tuned separately for each type of customer.'
 category: Machine Learning
-order: 2
+order: 3
 featured: true
 type: work
 year: 2026

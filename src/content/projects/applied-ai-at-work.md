@@ -2,7 +2,7 @@
 title: Applied AI at Work
 summary: Three AI services that take slow, manual catalogue and support work off people's desks — an LLM that categorizes products, a model that sorts product images, and a chatbot backend on AWS.
 category: LLM & AI Engineering
-order: 3
+order: 1
 featured: true
 type: work
 year: 2025 – 2026

@@ -2,7 +2,7 @@
 title: Freight Spend & Recovery
 summary: Found where freight costs were leaking out of margin — and gave finance and logistics one view of what freight cost and how much was recovered from customers.
 category: BI & Cost Analytics
-order: 1
+order: 2
 featured: true
 type: work
 year: 2022 – present
