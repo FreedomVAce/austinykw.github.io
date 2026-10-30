@@ -1,65 +1,56 @@
 ---
 title: E-Commerce Sales Analysis
-summary: End-to-end analysis of the public Olist marketplace dataset — a SQL model over nine raw tables, and statistical tests showing late delivery is by far the strongest predictor of one-star reviews, even within the same seller.
-category: End-to-End Analysis
-order: 1
-status: complete
-provenance: public
-provenanceNote: Public dataset — "Brazilian E-Commerce Public Dataset by Olist" (Kaggle, 2018), CC BY-NC-SA 4.0. Figures on this page are derived from it under the same licence.
-context: Personal project · public dataset
-stack: [SQL, DuckDB, Python, pandas, statsmodels, SciPy]
+summary: Showed that late delivery — not distance or price — is what drives a marketplace's one-star reviews, using a SQL model of 99,000 orders across nine tables.
+category: Analytics & Statistics
+order: 6
+featured: true
+type: independent
+year: 2026
+role: SQL data model, analysis, statistical testing and dashboard
+data: Public dataset — Olist Brazilian marketplace, 99,441 orders, 2016 – 2018
+stack: [SQL, DuckDB, Python, statsmodels]
 skills: [SQL, Python, Statistics, Dashboards, Customer Analytics]
 demo: ecommerce
+glance:
+  problem: A marketplace wanted to know what drives bad reviews and why customers do not come back — with the answers spread across nine separate tables.
+  did: I modelled the nine tables in SQL into one view per order, then tested whether late delivery really drives bad reviews or just travels with distance, bigger orders or particular sellers.
+  result: Late orders are 6.7% of orders but 32% of all one- and two-star reviews, and the effect holds even when comparing orders from the same seller. Fixing lateness would lift the average rating from 4.16 to 4.29.
 metrics:
   - { value: '62% vs 9%', label: 'of late vs on-time orders get a 1–2★ review' }
   - { value: '32%', label: 'of all 1–2★ reviews come from the 6.7% of orders that arrive late' }
   - { value: '3%', label: 'of customers ever order a second time' }
-links: { codePrivate: true }
 icon: cart
 ---
 
-## Problem
+## Why it mattered
 
-An online marketplace wants to know where revenue comes from, why some customers leave bad reviews, and whether customers come back. The answers sit across nine separate tables — orders, items, payments, reviews, customers, sellers, products, geolocation and category names — that have to be modelled together before any question can be answered.
+Ratings decide which sellers and products customers trust, and a marketplace where only 3% of customers return depends on every first order going well. Knowing what actually causes bad reviews tells the business where to invest.
 
-## Data
+## What I did
 
-The public [Olist dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce): 99,441 orders and 112,650 order items from a Brazilian marketplace, September 2016 to October 2018. The analysis uses the 20 complete months from January 2017 to August 2018; the months before and after hold only a handful of orders.
+- **Built a SQL model** joining orders, items, payments, reviews, customers, sellers, products, geolocation and category names into one row per order — handling duplicate reviews, missing category translations and a million-row location table.
+- **Analysed** sales, delivery performance by state and month, categories, payments and repeat purchasing.
+- **Tested the main finding three ways:** a rank test of review scores; a regression that holds distance, order size, number of sellers, freight cost and order value constant; and a comparison within the same seller, so seller quality cannot explain it.
 
-Data issues handled in the model:
+## Try the demo
 
-- some orders have several reviews — the latest answer is kept;
-- two Portuguese category names are missing from the official translation table;
-- the geolocation table has a million rows, several per zip prefix and some outside Brazil — one cleaned coordinate per prefix is used for customer–seller distance;
-- "late" is judged by calendar day, because promised dates carry no time of day.
-
-## Approach
-
-1. **SQL model (DuckDB)** — staging, then one row per order with delivery against promise, items, sellers, value, freight, payment, review and distance.
-2. **Descriptive analysis** — monthly trend, categories, states, payment mix and repeat purchasing, all in SQL.
-3. **Statistical testing** — is lateness really what drives bad reviews, or does it just travel with distance, bigger orders and pricier products?
-   - Mann–Whitney test of review scores, late vs on time;
-   - logistic regression of 1–2★ reviews on lateness, distance, number of items and sellers, freight share, order value and same-state shipping;
-   - a within-seller comparison (Mantel–Haenszel), so seller quality cannot explain the effect;
-   - a counterfactual: the average rating if late orders were reviewed like on-time ones.
+Switch metrics on each chart. The middle row is the main finding: how reviews change with days early or late, and what predicts a one- or two-star review.
 
 ## Results
 
-- **Growth, then a plateau:** 97,910 sold orders and R$13.4M of product revenue. Monthly revenue rose from about R$340k in the first half of 2017 to about R$920k in 2018 — and then stayed flat all year.
-- **Delivery is usually early — which hides the problem.** The median order arrives 12 days before its promised date, yet 6.8% arrive late. Lateness concentrates in the north-east (14–22% in several states, despite 30+ day promises) and spikes after Black Friday 2017 and in early 2018.
 - **Reviews fall off a cliff after the promised date:** about 4.1★ on time, 3.7★ one day late, 2.7★ three days late, below 2★ after a week.
-- **Late orders are 6.7× as likely to get a 1–2★ review** — 62% of them do, against 9% of on-time orders.
-- **The effect survives controls.** Holding distance, items, sellers, freight share, order value and same-state shipping constant, a late order has 18× the *odds* of a 1–2★ review (95% CI 17–19). Orders from several sellers (3.5×) or with several items (2.9×) are the next biggest risks; distance has no effect once lateness is accounted for.
-- **It is not just "bad sellers".** Comparing late and on-time orders *from the same seller* (1,203 sellers), the odds ratio is still 15.6 (95% CI 14.7–16.6); within the same product category, 16.1.
-- **Late orders are 6.7% of orders but 32% of 1–2★ reviews.** Reviewed like on-time orders, the average rating would rise from 4.16 to 4.29.
-- **Customers rarely return:** only 3% ordered twice. Growth is acquisition-led — and with revenue flat through 2018, retention is the untapped lever. Better delivery should help ratings; whether it lifts repeat purchases would need an experiment.
+- **It is not just bad sellers:** comparing orders from the same seller, late delivery still raises the odds of a 1–2★ review about 16-fold.
+- **Delivery is usually early, which hides the problem:** the typical order arrives 12 days before its promised date, but late rates reach 14–22% in several north-eastern states and spike after Black Friday.
+- **Customers rarely return:** only 3% ordered twice, and monthly revenue was flat through 2018 — retention is the untapped lever.
 
 ## Recommendations
 
-- Set promised dates per route from observed delivery times rather than one generous buffer — the north-east is both over-promised and still late.
-- Flag at-risk orders (multi-seller, multi-item, slow routes) and contact the customer before the promise lapses.
-- Treat peak periods (Black Friday) as a logistics capacity problem, not only a sales event.
+- Set promised dates per route from observed delivery times, not one generous buffer.
+- Flag at-risk orders (several sellers, several items, slow routes) and contact the customer before the promise lapses.
+- Plan peak periods such as Black Friday as a logistics capacity problem, not only a sales event.
 
-## Technology
+## How it works
 
-SQL (DuckDB) for staging, the order model and all descriptive tables; Python with statsmodels and SciPy for the tests; pytest — 12 tests, including one checking the regression recovers a known effect on simulated data. The dashboard on this page was originally planned in Tableau and is rebuilt for the web.
+SQL in DuckDB for staging, the order model and all descriptive tables; Python with statsmodels and SciPy for a Mann–Whitney test, logistic regression (n = 95,082) and a Mantel–Haenszel within-seller comparison. This is observational data — the evidence is strong, but it shows association, not proof of cause.
+
+*Data: [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) (Kaggle, 2018), licensed CC BY-NC-SA 4.0.*

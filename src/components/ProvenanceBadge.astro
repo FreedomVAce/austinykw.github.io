@@ -1,6 +1,0 @@
----
-import { PROVENANCE_LABEL, type Project } from '../lib/projects';
-interface Props { provenance: Project['data']['provenance'] }
-const { provenance } = Astro.props;
----
-<span class={`badge badge--${provenance}`}>{PROVENANCE_LABEL[provenance]}</span>

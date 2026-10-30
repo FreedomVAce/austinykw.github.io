@@ -1,0 +1,114 @@
+---
+/**
+ * How the three AI services work, as plain step-by-step flows.
+ * Deliberately generic: no internal names, thresholds or data.
+ */
+const systems = [
+  {
+    id: 'categorize',
+    title: 'Product categorization with an LLM',
+    purpose: 'New products arrive with a supplier description; someone has to file each one into the right place in a multi-level category tree.',
+    steps: [
+      { name: 'Product details', note: 'name, description, brand, features' },
+      { name: 'Build the prompt', note: 'the category tree + similar products already filed by staff' },
+      { name: 'LLM suggests a category', note: 'run locally or on AWS Bedrock', tech: 'LLM' },
+      { name: 'Check & score', note: 'is the path valid? how confident are we, from several independent signals?' },
+      { name: 'Route', note: 'auto-accept · spot-check · human review', human: true },
+    ],
+    loop: 'Reviewer corrections become examples for the next prompts — accuracy improves without retraining.',
+    stack: ['Python', 'FastAPI', 'LLM (local & AWS Bedrock)', 'Docker', 'pytest'],
+  },
+  {
+    id: 'images',
+    title: 'Product image classifier',
+    purpose: 'Every product image had to be dragged into a category by hand (product shot, lifestyle, and so on) before it could go online.',
+    steps: [
+      { name: 'Product images', note: 'from the catalogue' },
+      { name: 'CNN model', note: 'trained on images staff had already sorted', tech: 'ML' },
+      { name: 'FastAPI service', note: 'returns a category and a confidence for each image' },
+      { name: '"Classify images" button', note: 'inside the internal Java application' },
+      { name: 'Staff review', note: 'each prediction carries a confidence score, so uncertain images can be checked by a person', human: true },
+    ],
+    loop: 'Built in phases: first brand by brand, using fully labelled products as ground truth, then one model across brands.',
+    stack: ['Python', 'TensorFlow / Keras', 'FastAPI', 'Java integration'],
+  },
+  {
+    id: 'chatbot',
+    title: 'AI chatbot backend on AWS',
+    purpose: 'An internal assistant needed a secure, serverless way to send staff questions to a large language model.',
+    steps: [
+      { name: 'Staff question', note: 'from the chat interface' },
+      { name: 'AWS Lambda', note: 'the function that handles each request' },
+      { name: 'AWS Secrets Manager', note: 'credentials are read at run time, never stored in code' },
+      { name: 'Amazon Bedrock', note: 'the foundation model that generates the answer', tech: 'LLM' },
+      { name: 'Answer', note: 'returned to the user' },
+    ],
+    loop: 'AWS IAM roles and policies control what the Lambda function may access — Bedrock and the stored secret.',
+    stack: ['AWS Lambda', 'Amazon Bedrock', 'AWS Secrets Manager', 'AWS IAM'],
+  },
+];
+---
+<section class="viz-root demo ai" aria-labelledby="ai-title">
+  <div class="demo-head">
+    <p class="eyebrow">How it works</p>
+    <h2 id="ai-title">Three AI services, step by step</h2>
+    <p class="demo-lead">Each one replaces a slow manual task, and each keeps a person in the loop where the model is unsure.</p>
+  </div>
+
+  <div class="systems">
+    {systems.map((s, i) => (
+      <article class="chart-card system" id={s.id}>
+        <header>
+          <span class="num">{i + 1}</span>
+          <div>
+            <h3>{s.title}</h3>
+            <p class="purpose">{s.purpose}</p>
+          </div>
+        </header>
+        <ol class="flow">
+          {s.steps.map((st) => (
+            <li class:list={[{ human: st.human, model: st.tech }]}>
+              <strong>{st.name}</strong>
+              <span>{st.note}</span>
+            </li>
+          ))}
+        </ol>
+        <p class="loop">{s.loop}</p>
+        <ul class="chips">{s.stack.map((t) => <li class="chip">{t}</li>)}</ul>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .systems { display: grid; gap: 1rem; margin-top: 1.5rem; }
+  .system { padding: 1.25rem; display: grid; gap: 1rem; }
+  .system header { display: flex; gap: 0.9rem; align-items: flex-start; }
+  .num {
+    flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent); font-family: var(--font-mono); font-weight: 600;
+  }
+  .system h3 { font-size: 1.1rem; }
+  .purpose { color: var(--muted); font-size: 0.92rem; margin-top: 0.2rem; }
+
+  .flow { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1.4rem; counter-reset: s; }
+  .flow li {
+    position: relative; display: grid; gap: 0.25rem; align-content: start;
+    background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 0.7rem 0.75rem;
+  }
+  .flow li strong { font-size: 0.86rem; color: var(--ink); }
+  .flow li span { font-size: 0.78rem; color: var(--muted); line-height: 1.4; }
+  .flow li.model { border-color: color-mix(in srgb, var(--series-1) 55%, transparent); background: color-mix(in srgb, var(--series-1) 8%, var(--surface)); }
+  .flow li.human { border-color: color-mix(in srgb, var(--accent) 60%, transparent); background: var(--accent-soft); }
+  /* Arrow between steps */
+  .flow li + li::before {
+    content: '→'; position: absolute; left: -1.15rem; top: 50%; transform: translateY(-50%);
+    color: var(--muted); font-size: 0.95rem;
+  }
+  .loop { font-size: 0.88rem; color: var(--ink-2); border-left: 2px solid var(--accent); padding-left: 0.7rem; }
+
+  @media (max-width: 860px) {
+    .flow { grid-template-columns: minmax(0, 1fr); gap: 1.1rem; }
+    .flow li + li::before { content: '↓'; left: 50%; top: -1.05rem; transform: translateX(-50%); }
+  }
+</style>

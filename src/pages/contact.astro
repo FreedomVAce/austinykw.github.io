@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import { profile } from '../data/profile';
+import { withBase } from '../lib/url';
 
 const { linkedin, github, email, formspreeId } = profile.links;
 ---
@@ -12,8 +13,7 @@ const { linkedin, github, email, formspreeId } = profile.links;
         <p class="eyebrow">Contact</p>
         <h1 class="section-title">Let's connect</h1>
         <p class="section-lead">
-          Whether it's a role, a project or a coffee chat about data and analytics, I'd like to hear from you.
-          LinkedIn is the quickest way to reach me.
+          Hiring for a data or machine-learning role, or want to talk about a project? Email or LinkedIn reaches me fastest.
         </p>
         <ul class="channels">
           <li>
@@ -39,6 +39,22 @@ const { linkedin, github, email, formspreeId } = profile.links;
         </ul>
       </div>
 
+      {!formspreeId && (
+        <aside class="card looking">
+          <h2>What I'm looking for</h2>
+          <p>{profile.lookingFor}, where I can combine analysis with building the solution.</p>
+          <ul>
+            <li><strong>Strongest in</strong> SQL, Python, BI dashboards, forecasting, recommendation systems and LLM services</li>
+            <li><strong>Industry experience</strong> six years in distribution — freight, pricing, inventory and product data</li>
+            <li><strong>Based in</strong> {profile.location}</li>
+          </ul>
+          <div class="cta">
+            <a class="btn btn--primary btn--sm" href={withBase('resume/')}>View résumé</a>
+            <a class="btn btn--ghost btn--sm" href={withBase('projects/')}>See projects</a>
+          </div>
+        </aside>
+      )}
+
       {formspreeId && (
         <form class="card form" action={`https://formspree.io/f/${formspreeId}`} method="POST" id="contact-form">
           <div class="row">
@@ -57,6 +73,12 @@ const { linkedin, github, email, formspreeId } = profile.links;
 
 <style>
   .contact { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: clamp(32px, 6vw, 64px); align-items: start; }
+  .looking { padding: clamp(20px, 3vw, 28px); display: grid; gap: 0.8rem; }
+  .looking h2 { font-size: 1.25rem; }
+  .looking p { color: var(--ink-2); }
+  .looking ul { padding-left: 1.1rem; display: grid; gap: 0.45rem; font-size: 0.92rem; color: var(--ink-2); }
+  .looking strong { color: var(--ink); }
+  .looking .cta { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.4rem; }
   .channels { list-style: none; padding: 0; display: grid; gap: 0.75rem; margin-top: 2rem; max-width: 460px; }
   .channel { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.15rem; text-decoration: none; color: var(--accent); }
   .channel span { display: flex; flex-direction: column; color: var(--ink-2); font-size: 0.92rem; overflow-wrap: anywhere; }
