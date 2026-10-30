@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import SkillGroups from '../components/SkillGroups.astro';
-import { profile, about } from '../data/profile';
+import { profile, about, resume } from '../data/profile';
 import { withBase } from '../lib/url';
 ---
 <Base title="About" description={`About ${profile.name}: ${profile.tagline}`}>
@@ -29,6 +29,24 @@ import { withBase } from '../lib/url';
   <section class="section section--alt">
     <div class="container">
       <div class="section-head">
+        <p class="eyebrow">Career path</p>
+        <h2 class="section-title">From operations to production machine learning</h2>
+      </div>
+      <ol class="path">
+        {[...resume.experience].reverse().map((e) => (
+          <li>
+            <span class="when">{e.period}</span>
+            <strong>{e.role}</strong>
+            <span class="org">{e.org}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
         <p class="eyebrow">How I work</p>
         <h2 class="section-title">What I bring to a team</h2>
       </div>
@@ -40,7 +58,7 @@ import { withBase } from '../lib/url';
     </div>
   </section>
 
-  <section class="section">
+  <section class="section section--alt">
     <div class="container">
       <div class="section-head">
         <p class="eyebrow">Toolkit</p>
@@ -57,6 +75,11 @@ import { withBase } from '../lib/url';
   .cta { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 2rem; }
   .photo img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; border-radius: 20px; border: 1px solid var(--line); }
   .photo figcaption { display: flex; align-items: center; gap: 0.35rem; margin-top: 0.75rem; color: var(--muted); font-size: 0.85rem; }
+  .path { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); gap: 1rem; }
+  .path li { display: grid; gap: 0.2rem; align-content: start; border-top: 2px solid var(--accent); padding-top: 0.8rem; }
+  .path .when { font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent); }
+  .path strong { font-size: 1rem; color: var(--ink); }
+  .path .org { font-size: 0.85rem; color: var(--muted); }
   .strength { padding: 22px; }
   .strength h3 { margin-bottom: 0.4rem; }
   .strength p { color: var(--muted); font-size: 0.93rem; }

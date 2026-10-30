@@ -3,16 +3,10 @@ import { SKILLS } from '../data/profile';
 
 export type Project = CollectionEntry<'projects'>;
 
-export const STATUS_LABEL: Record<Project['data']['status'], string> = {
-  complete: 'Complete',
-  'in-progress': 'Case study in progress',
-  planned: 'Planned',
-};
-
-export const PROVENANCE_LABEL: Record<Project['data']['provenance'], string> = {
-  public: 'Public data',
-  synthetic: 'Synthetic data',
-  personal: 'Self-collected data',
+export const TYPE_LABEL: Record<Project['data']['type'], string> = {
+  work: 'Work project',
+  independent: 'Independent project',
+  capstone: 'Capstone project',
 };
 
 export async function getProjects(): Promise<Project[]> {

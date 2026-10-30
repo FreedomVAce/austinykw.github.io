@@ -5,11 +5,11 @@ const parquetUrl = withBase('data/freight-shipments.parquet');
 ---
 <section class="viz-root demo freight" data-src={dataUrl} data-parquet={parquetUrl} aria-labelledby="fr-demo-title">
   <div class="demo-head">
-    <p class="eyebrow">Interactive dashboard · synthetic data</p>
+    <p class="eyebrow">Interactive demo</p>
     <h2 id="fr-demo-title">Freight recovery dashboard</h2>
     <p class="demo-lead">
-      Four years of carrier invoices reconciled to shipments and customer billing. Filter by year, region and
-      carrier; every figure is recomputed from the monthly branch × carrier cube produced by the SQL model.
+      Filter by year, region and carrier to see where freight is recovered and where it leaks. Built on four years of
+      simulated carrier and customer invoices with the same structure as the production data.
     </p>
   </div>
 
@@ -82,7 +82,7 @@ const parquetUrl = withBase('data/freight-shipments.parquet');
         <div>
           <h3 id="fr-sql-title">Query the data yourself</h3>
           <p class="fine">
-            Runs DuckDB in your browser against all <span data-k="nShip">–</span> synthetic shipments
+            Runs DuckDB in your browser against all <span data-k="nShip">–</span> demo shipments
             (<span data-k="pqSize">–</span> Parquet). Nothing is sent to a server. Table: <code>shipments</code>.
           </p>
         </div>

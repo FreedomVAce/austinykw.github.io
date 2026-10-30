@@ -1,81 +1,55 @@
 ---
 title: Inventory Demand Forecasting
-summary: Branch-level demand forecasting from raw stock-movement logs — rebuilding stock positions, backtesting seasonal regression, Holt-Winters and SARIMA against a baseline, and turning the forecast into reorder points.
+summary: Branch-level demand forecasts built from raw stock movements, so buyers can order enough to cover supplier lead time without tying up cash in overstock.
 category: Forecasting
-order: 5
-status: complete
-provenance: synthetic
-provenanceNote: Built on confidential inventory data. This version runs the same methods on a simulated stock ledger for fictional products and branches; the simulation's parameters are hand-picked, not fitted to the real data.
-context: Professional project · rebuilt as a demo
-stack: [Python, pandas, statsmodels, NumPy, pytest]
+order: 4
+featured: false
+type: work
+year: 2025
+role: Data preparation, forecasting models and backtesting
+data: ERP stock-movement exports. The interactive demo runs on a simulated stock ledger for 10 products across 5 branches.
+stack: [Python, pandas, statsmodels, Excel]
 skills: [Python, Statistics, Forecasting, Data Pipelines]
 demo: inventory-forecast
+glance:
+  problem: Buyers ordered from recent sales, which reacts late to seasonal swings — heaters in autumn, air conditioners in spring — and risks either stock-outs or overstock.
+  did: I turned the ERP's stock-movement log into clean sales history per branch, compared four forecasting methods against a simple baseline, and turned the forecast into reorder points.
+  result: Branch-level forecast tables for the buying team that support more accurate stock planning and reduce overstock risk. In the demo backtest every model beats the baseline, cutting forecast error by 11–13%.
 metrics:
-  - { value: '−16%', label: 'one-month-ahead error vs seasonal-naive baseline' }
-  - { value: '50', label: 'product × branch series backtested over 12 origins' }
-  - { value: '83k', label: 'raw ledger rows parsed and reconciled' }
-links: { codePrivate: true }
+  - { value: '−13%', label: 'forecast error vs "same month last year"', note: 'backtest, demo data' }
+  - { value: '50', label: 'product × branch series forecast and backtested', note: 'demo data' }
+  - { value: '4 models', label: 'compared fairly on months they never saw' }
 icon: box
 ---
 
-## Problem
+## Why it mattered
 
-Buyers needed to know how much of each product every branch would sell over the next few months, so they could order enough to cover the supplier's lead time without tying up cash in overstock. Ordering from recent sales alone reacts late to seasonal swings — heaters in autumn, air conditioners in spring.
+Ordering too little loses sales during the season; ordering too much ties up cash in stock that sits until next year. Buyers needed forecasts per branch, early enough to order against the supplier's lead time.
 
-## Data
+## What I built
 
-The ERP does not export a sales table. It exports a **stock-movement ledger** per product: every sale, return, purchase order, receipt, transfer, shrinkage write-off and cycle count, with signed quantities, by branch and date.
+- **Clean demand history from a messy source.** The ERP exports every stock movement — sales, returns, transfers, write-offs, stock counts — not a sales table. I rebuilt stock positions and kept only genuine customer demand, because transfers and write-offs also reduce stock and would inflate the forecast.
+- **A fair comparison of forecasting methods:** seasonal regression, Holt-Winters, SARIMA and an average of the three, each tested on months it had not seen, against "same month last year".
+- **Reorder points** from the forecast and the model's own past error, rounded to the supplier's case pack.
 
-For this public version, a simulator generates four years of that ledger for 10 products across 5 branches (~83,000 rows) — seasonal, steady and intermittent products, promotions, supplier lead times that vary order to order, lost sales during stock-outs, and stock losses that nobody records until a cycle count finds them. The export is deliberately as awkward as a real one: newest rows first, inconsistent branch codes, padded text and quantities written with a trailing sign (`"     2-"`).
+## Try the demo
 
-## Approach
-
-1. **Parse** the export and restore posting order — a cycle count must apply *after* the day's sales, not before.
-2. **Rebuild stock positions**: on-hand stock resets to each cycle count and accumulates movements in between; on-order stock is a running sum. Tested against the simulator's ground truth: the rebuilt book stock and on-order quantities match exactly for all 50 series.
-3. **Isolate demand**: only customer sales net of returns. Transfers, shrinkage and count corrections also reduce stock, and counting them as sales would inflate the forecast.
-4. **Forecast** monthly demand with four approaches plus an ensemble:
-   - seasonal naive — same month last year, the baseline to beat;
-   - multiple regression with a linear trend and month dummies;
-   - Holt-Winters additive smoothing with a damped trend;
-   - SARIMA(1,0,0)(0,1,1)₁₂;
-   - an equal-weight average of the three statistical models.
-5. **Backtest** with a rolling origin: at each of the last 12 month-ends, every model is refit on the past only and forecasts 1–6 months ahead.
-6. **Replenish**: forecast demand over the lead time plus safety stock sized from the model's *own* backtest error gives the reorder point; orders round up to the supplier's case pack.
+Pick a product and branch to compare models on four years of sales, and adjust lead time and service level to see the reorder point change.
 
 ## Results
 
-Backtest error on months the models never saw, averaged over 50 product × branch series:
+| Model | Error vs baseline (backtest) |
+|---|---|
+| Average of three models | −13% |
+| Seasonal regression | −13% |
+| Holt-Winters | −12% |
+| SARIMA | −11% |
 
-| Model | Mean abs. error | vs baseline | MASE | Bias | Best on |
-|---|---|---|---|---|---|
-| Ensemble | 10.1 units/mo | **−13%** | 1.016 | −2.3% | 6 series |
-| Seasonal regression | 10.1 | −13% | 1.015 | −1.9% | 11 |
-| Holt-Winters | 10.2 | −12% | 1.021 | −3.0% | 17 |
-| SARIMA | 10.3 | −11% | 1.046 | −2.1% | 7 |
-| Seasonal naive (baseline) | 11.6 | — | 1.160 | −4.7% | 9 |
+- Every model beats the baseline at every horizon; one month ahead, the best cuts error by about 16%.
+- No model wins everywhere, so the demo lets you compare per series instead of declaring one winner.
+- A low-volume product (about 10 units a month) is barely forecastable monthly — a signal to use a different method, not a better-tuned one.
+- The simulated seasonality is regular, which suits seasonal regression; on real data the adaptive models would likely close the gap.
 
-MASE scales each series' error by the baseline's *in-sample* error, so values above 1.0 do not mean "worse than the baseline" — the baseline itself scores 1.16 out of sample. The "vs baseline" column is the direct comparison.
+## How it works
 
-- Every statistical model beats the baseline at every horizon; one month ahead, seasonal regression cuts the absolute error by about 16%.
-- No model wins everywhere. Holt-Winters is best on the most series, regression on average, so the demo lets you compare per series instead of declaring one winner.
-- All models under-forecast slightly. Part of that is structural: lost sales never reach the ledger, so recorded demand is a little lower than true demand.
-- The intermittent product (about 10 units a month) is barely forecastable at monthly level — every model lands close to the baseline, which is a signal to use a different method rather than a better-tuned one.
-- **Caveat:** the simulator's seasonality is regular (the same shape every year), which suits seasonal regression. On real data, where seasons shift and promotions vary, the adaptive methods (Holt-Winters, SARIMA) or the ensemble would likely close the gap — which is why the demo keeps all of them.
-
-## Business impact
-
-In the original work, branch-level forecast tables supported more accurate stock planning and reduced overstock risk.
-
-## Challenges
-
-- **The ledger is not a sales table.** Most of the effort is in reconciliation: which movements are demand, and which only move stock.
-- **Censored demand.** When a branch is out of stock, demand disappears from the data. Forecasts trained on sales inherit that bias.
-- **Honest evaluation.** In-sample fit flatters every model; only the rolling-origin backtest shows which ones generalise.
-
-## What I learned
-
-On short monthly series, data preparation and an honest backtest matter more than model choice: four quite different models land within two points of each other, and all beat the baseline by 11–13%. A baseline is essential — "the model fits well" means little until it beats "same month last year".
-
-## Technology
-
-Python, pandas and NumPy for the pipeline; statsmodels for regression, Holt-Winters and SARIMA; pytest — 36 tests covering parsing, stock reconstruction against simulator ground truth, model behaviour, leakage-free backtesting and the reorder maths. The demo on this page runs on the exported JSON, with the reorder calculation reproduced in the browser.
+Python and pandas rebuild positions (a stock count resets the on-hand balance; movements accumulate in between), statsmodels fits the models, and a rolling-origin backtest refits every model at each of 12 month-ends. 36 automated tests check parsing, stock reconstruction, the models and the reorder maths.
