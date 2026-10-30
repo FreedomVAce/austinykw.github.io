@@ -110,6 +110,11 @@ export async function mountRecommenderDemo(root: HTMLElement) {
       b.addEventListener('click', () => { cart.splice(k, 1); render(); });
       li.appendChild(b); ul.appendChild(li);
     });
+    // Say why "add" does nothing instead of failing silently.
+    const add = $<HTMLButtonElement>('[data-act="add"]');
+    const inCart = cart.includes(Number(sel('product').value));
+    add.disabled = inCart || cart.length >= 8;
+    add.textContent = inCart ? 'Already in cart' : cart.length >= 8 ? 'Cart is full (8 items)' : 'Add selected product';
   }
 
   function render() {
