@@ -1,10 +1,9 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 
-// The site is served from the `austinykw.github.io` repo under the FreedomVAce
-// account, i.e. https://freedomvace.github.io/austinykw.github.io/.
-// If the repo is renamed to <username>.github.io or a custom domain is added,
-// set BASE_PATH=/ (or change the default below) — every internal link goes
+// The site is the `austinykw.github.io` user site, served at the domain root:
+// https://austinykw.github.io/. To serve it from a sub-path instead (a project
+// repo), set BASE_PATH (or change the default below) — every internal link goes
 // through `withBase()` so nothing else needs to change.
 /** Open external links in Markdown (e.g. dataset sources) in a new tab, like the rest of the site. */
 function externalLinks() {
@@ -20,8 +19,8 @@ function externalLinks() {
 }
 
 export default defineConfig({
-  site: process.env.SITE_URL ?? 'https://freedomvace.github.io',
-  base: process.env.BASE_PATH ?? '/austinykw.github.io',
+  site: process.env.SITE_URL ?? 'https://austinykw.github.io',
+  base: process.env.BASE_PATH ?? '/',
   trailingSlash: 'ignore',
   build: { format: 'directory' },
   markdown: { rehypePlugins: [externalLinks] },

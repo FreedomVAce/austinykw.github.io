@@ -18,7 +18,7 @@ export const profile = {
   photo: 'images/profile_pic.jpeg',
   links: {
     linkedin: 'https://www.linkedin.com/in/austinykw/',
-    github: 'https://github.com/FreedomVAce',
+    github: 'https://github.com/austinykw',
     /** Public email — shown on Contact, Résumé and in the footer. Set to '' to hide it. */
     email: 'austinyu504@gmail.com',
     /** Formspree form ID (the part after /f/). Empty = the contact form is hidden. */

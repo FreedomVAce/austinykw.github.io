@@ -1,6 +1,6 @@
 # Austin Yu — Data Analytics & Data Science Portfolio
 
-Source for **https://freedomvace.github.io/austinykw.github.io/** — case studies in analytics,
+Source for **https://austinykw.github.io/** — case studies in analytics,
 forecasting and machine learning.
 
 Built with [Astro](https://astro.build) as a static site and deployed to GitHub Pages by GitHub Actions.

@@ -4,7 +4,7 @@ import { readdir, readFile, stat } from 'node:fs/promises';
 import { join, extname } from 'node:path';
 
 const DIST = 'dist';
-const BASE = (process.env.BASE_PATH ?? '/austinykw.github.io').replace(/\/$/, '');
+const BASE = (process.env.BASE_PATH ?? '/').replace(/\/$/, '');
 
 async function* walk(dir) {
   for (const e of await readdir(dir, { withFileTypes: true })) {

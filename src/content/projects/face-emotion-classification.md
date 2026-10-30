@@ -12,7 +12,7 @@ stack: [Python, TensorFlow / Keras, scikit-learn, OpenCV]
 skills: [Python, Machine Learning, Deep Learning]
 demo: face-emotion
 links:
-  repo: https://github.com/FreedomVAce/Face_Recognition
+  repo: https://github.com/austinykw/Face_Recognition
 glance:
   problem: Two related questions of very different difficulty. Who is this person, and what are they feeling?
   did: Recorded a custom face dataset with OpenCV, built a baseline model (eigenfaces), then trained convolutional neural networks for both identity and emotion and evaluated them class by class.
