@@ -9,7 +9,7 @@ export const profile = {
   location: 'Vancouver, BC',
   /** Homepage hero: who I am and what I deliver, in one or two sentences. */
   tagline:
-    'I turn operational data into measurable savings, from SQL analysis and dashboards to forecasting models and AI services in production.',
+    'I bridge business operations and machine learning, turning operational data into cost savings, better decisions and production-ready tools.',
   /** Short professional summary used on the homepage and résumé page. */
   intro:
     'Data analyst and machine learning developer with six years in wholesale distribution and supply chain, working across inventory and pricing data, freight analytics, recommendation systems and LLM services. I combine business understanding with hands-on SQL, Python, BI and cloud implementation.',
