@@ -13,7 +13,7 @@ const all = await getProjects();
   <section class="hero">
     <div class="container hero-grid">
       <div class="hero-copy">
-        {profile.openToWork && <p class="status-pill"><span class="dot" aria-hidden="true"></span>Open to {profile.lookingFor.toLowerCase()}</p>}
+        {profile.openToWork && <p class="status-pill"><span class="dot" aria-hidden="true"></span>Open to {profile.lookingFor}</p>}
         <h1>{profile.name}</h1>
         <p class="role">{profile.role}</p>
         <p class="tagline">{profile.tagline}</p>
@@ -42,7 +42,7 @@ const all = await getProjects();
     <div class="container">
       <div class="section-head">
         <p class="eyebrow">What I do</p>
-        <h2 class="section-title">Analytics, data science and the implementation to make it stick</h2>
+        <h2 class="section-title">Analytics, machine learning and the implementation to make it stick</h2>
         <p class="section-lead">{profile.intro}</p>
       </div>
       <div class="grid caps">
@@ -86,7 +86,7 @@ const all = await getProjects();
   <section class="section section--alt">
     <div class="container closing">
       <h2 class="section-title">Let's talk</h2>
-      <p class="section-lead">I'm open to {profile.lookingFor.toLowerCase()}. The quickest way to reach me is by email or LinkedIn.</p>
+      <p class="section-lead">I'm open to {profile.lookingFor}. The quickest way to reach me is by email or LinkedIn.</p>
       <div class="cta center">
         <a class="btn btn--primary" href={withBase('contact/')}>Contact me <Icon name="arrow" size={16} /></a>
         <a class="btn btn--ghost" href={withBase('resume/')}>View résumé</a>
