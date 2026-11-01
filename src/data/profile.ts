@@ -39,7 +39,7 @@ export const proof = [
 /** "What I do" on the homepage: analytics + data science + business understanding + implementation. */
 export const capabilities = [
   { icon: 'chart', title: 'Analytics', text: 'Freight, pricing and inventory analysis that ties every number to a cost, a saving or a decision.' },
-  { icon: 'database', title: 'Data Engineering', text: 'SQL, data-warehouse rules and automated cleaning, so reports and models start from data people trust.' },
+  { icon: 'database', title: 'Data Engineering', text: 'SQL pipelines, data validation and automated cleaning, so every report and model is built on accurate, consistent data.' },
   { icon: 'sparkles', title: 'Machine Learning', text: 'Forecasting, segmentation and recommendation models, always measured against a simple baseline.' },
   { icon: 'box', title: 'Deployment', text: 'Models served through FastAPI, LLM services and AWS, built into the tools teams already use.' },
 ];
