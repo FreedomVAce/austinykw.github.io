@@ -120,8 +120,10 @@ export const resume: {
   experience: { role: string; org: string; location: string; period: string; note?: string; points: Bullet[] }[];
   education: { title: string; org: string; period?: string; detail?: string }[];
   certifications: { title: string; org: string; period?: string; detail?: string }[];
-  /** Sidebar skills, in the résumé's own categories. */
+  /** Skills, in the résumé's own categories. */
   skills: { label: string; items: string }[];
+  /** "Project Highlights" at the end of the résumé; href is a case-study path. */
+  projects: { title: string; href: string; text: string }[];
 } = {
   profile: [
     'Analytics professional who bridges business operations and machine learning. With six years of experience in wholesale distribution and supply chain, I have progressed from inventory and pricing into data analysis and ML development. Combines deep knowledge of supply-chain, pricing and product data with SQL, Python, Power BI and AWS to deliver measurable results, including a 5% reduction in freight cost and a 10% increase in freight recovery. I am seeking Data Analyst, Machine Learning Engineer or AI Engineer roles where I can turn operational data into cost savings, better decisions and production-ready tools.',
@@ -139,6 +141,12 @@ export const resume: {
     { label: 'Microsoft Office', items: 'Excel, Access, Word, PowerPoint' },
     { label: 'Project Tools', items: 'Jira (Agile), Figma, Git & GitHub' },
   ],
+  projects: [
+    { title: 'Applied AI at Work', href: 'projects/applied-ai-at-work/', text: 'Designed and deployed three AI services that automate catalogue and support workflows: LLM product categorization, CNN image classification and an AWS chatbot backend.' },
+    { title: 'Freight Spend & Recovery', href: 'projects/freight-spend-recovery/', text: 'Identified sources of freight cost leakage and built a unified view of freight spend and recovery, contributing to a 5% reduction in freight cost.' },
+    { title: 'Product Recommendation Engine', href: 'projects/product-recommendation-engine/', text: 'Developed segment-specific product recommendations served through FastAPI, using purchase history, product similarity and curated pairings.' },
+    { title: 'E-Commerce Sales Analysis', href: 'projects/ecommerce-sales-analysis/', text: 'Delivered an end-to-end sales, delivery and customer analysis of 99,000 marketplace orders, quantifying the impact of late delivery on customer satisfaction.' },
+  ],
   experience: [
     {
       role: 'Junior Machine Learning Developer',
@@ -147,9 +155,9 @@ export const resume: {
       period: 'Feb 2026 – Present',
       note: 'Part-time, alongside the Data Analyst role',
       points: [
-        { text: 'Built a hybrid recommendation engine — collaborative filtering, market-basket analysis, content similarity and expert-curated pairings, tuned per customer segment — serving product-page and cart recommendations through a FastAPI service.', href: 'projects/product-recommendation-engine/', label: 'Case study' },
-        { text: 'Developed an LLM-based product categorization service (local models or AWS Bedrock) that files new products into a multi-level category taxonomy, scores its own confidence to route each prediction to auto-accept, spot-check or human review, and learns from reviewer corrections.', href: 'projects/applied-ai-at-work/', label: 'How it works' },
-        { text: 'Implemented the AWS backend for an internal AI chatbot: an AWS Lambda function handles each request and calls a foundation model on Amazon Bedrock, with credentials kept in AWS Secrets Manager instead of code and IAM roles and policies controlling what the function can access.', href: 'projects/applied-ai-at-work/', label: 'How it works' },
+        { text: 'Built a hybrid recommendation engine that suggests related products on product and cart pages, combining purchase history, product similarity and expert pairings, tuned for each customer segment and served through FastAPI.', href: 'projects/product-recommendation-engine/', label: 'Case study' },
+        { text: 'Developed an LLM service, running locally or on AWS Bedrock, that assigns new products to the right place in a multi-level category taxonomy, sends uncertain cases to staff for review and improves from their corrections.', href: 'projects/applied-ai-at-work/', label: 'How it works' },
+        { text: 'Develop the AWS backend for an internal AI chatbot, using Lambda to handle requests and Amazon Bedrock to generate answers, with credentials stored in Secrets Manager and access controlled through IAM.', href: 'projects/applied-ai-at-work/', label: 'How it works' },
       ],
     },
     {
@@ -158,14 +166,16 @@ export const resume: {
       location: 'Victoria, BC',
       period: 'Sep 2022 – Present',
       points: [
-        { text: 'Conduct monthly and yearly freight analysis to optimize delivery schedules, resulting in a 5% reduction in freight cost and a 10% increase in freight recovery.', href: 'projects/freight-spend-recovery/', label: 'Case study' },
-        { text: 'Designed and deployed a CNN image classification model that sorts product images into categories, served through FastAPI and integrated into an internal Java application as a one-click action; each prediction carries a confidence score so uncertain images can be reviewed — replacing a manual, click-heavy workflow.', href: 'projects/applied-ai-at-work/', label: 'How it works' },
-        'Automated pricing for non-stock products and devised a decision-tree approach to dynamic pricing based on price range, product category and shipment type.',
-        'Re-implemented the calculation for non-SKU products with business stakeholders, reducing redundancies by 90% and establishing data-warehouse business rules.',
-        'Built freight and operations analytics in Python (pandas, Matplotlib, statistical methods, scikit-learn) and delivered them through Dundas BI dashboards (data modelling, DAX, dashboard UX).',
-        { text: 'Built branch-level demand forecasts from raw stock-movement data — rebuilding stock positions and comparing seasonal regression, Holt-Winters and SARIMA — to support replenishment planning.', href: 'projects/inventory-demand-forecasting/', label: 'Case study' },
-        'Provide product information, pricing and product data to major online and big-box retail partners to support online sales.',
-        'Write Jira user stories, personas and acceptance criteria in an Agile team, and design SaaS interface concepts in Figma with developers and stakeholders.',
+        { text: 'Conduct monthly and yearly freight analysis to optimize delivery schedules, resulting in a 5% reduction in freight cost and a 10% increase in recovery.', href: 'projects/freight-spend-recovery/', label: 'Case study' },
+        'Analyze and reimplement a calculation for non-SKU products by partnering with various business stakeholders which reduce redundancies by 90% and establish data warehouse business rules.',
+        'Revolutionize the pricing platform by automating pricing for non-stock products, significantly boosting profitability and accuracy.',
+        'Devise a decision-tree approach for dynamic pricing that integrates factors such as price range, product category, and shipment type.',
+        'Create and analyze comprehensive freight analytics reports using Python (pandas, matplotlib, statistical methods, scikit-learn) and delivered actionable insights through Dundas BI dashboards (data modeling, DAX and dashboard UX design) to support operational planning and cost optimization.',
+        { text: 'Built demand forecasts for each branch from raw stock movement data, comparing seasonal regression, Holt-Winters and SARIMA models to support replenishment planning.', href: 'projects/inventory-demand-forecasting/', label: 'Case study' },
+        { text: 'Designed and deployed a CNN image classification model that sorts product images into categories with a single click inside an internal Java application, flagging uncertain images for review and replacing a slow manual process.', href: 'projects/applied-ai-at-work/', label: 'How it works' },
+        'Partner with major retail giants to provide insightful product information to key distributors, and precise pricing and product data to facilitate online sales.',
+        'Create and manage Jira tickets within an Agile delivery environment, defining user personas, user stories, and acceptance criteria to translate business requirements into actionable analytics and product deliverables.',
+        'Design intuitive and user-centered SaaS interface concepts using Figma, collaborating with developers and stakeholders to translate analytical workflows into clear, actionable user experiences.',
       ],
     },
     {
@@ -174,12 +184,14 @@ export const resume: {
       location: 'Victoria, BC',
       period: 'May 2021 – Sep 2022',
       points: [
-        'Maintained data for over 1.2 million product items — part IDs, descriptions, names, images and documents — including sensitive pricing information.',
-        'Automated data cleaning and validation with Python, saving about 10 hours of manual work per week and improving the reliability of business reporting.',
-        'Led the migration of pricing data from an acquired competitor during the expansion into Alberta and Saskatchewan, with minimal disruption.',
-        'Extracted, joined and structured large datasets (50K+ records) from the product information system with SQL for analytics, reporting and data-quality work.',
-        'Led a team verifying UPC and EAN codes and standardized product finish attributes, improving customer search accuracy and catalogue consistency.',
-        'Worked with software developers to improve API data collection and storage, and reported data-quality issues to purchasing agents.',
+        'Orchestrated daily maintenance for over 1.2 million product items, including updating part IDs, verifying product descriptions and names, and ensuring the accuracy of images and documents.',
+        'Managed a database of over 1 million products, including sensitive pricing information and donation processing.',
+        'Spearheaded the seamless migration of pricing data from the acquired competitor, during the expansion into Alberta and Saskatchewan, to ensure minimal disruption and maximum efficiency.',
+        'Automated data wrangling and cleaning workflows using Python, reducing manual intervention, accelerating insight delivery, and saving 10 hours per week while improving data reliability for business reporting.',
+        'Collaborated with software developers to improve API data collection and storage processes, and provided regular communication to purchasing agents on data quality issues.',
+        'Led a dedicated team to ensure data integrity by verifying UPC (12-digit) and EAN (13-digit) codes which drastically improved customer search accuracy.',
+        'Standardized product finish attributes to ensure consistency and reliability across the database.',
+        'Extracted, joined, and structured large datasets (50K+ records) from PIM using SQL, supporting downstream analytics, reporting, and data quality improvements.',
       ],
     },
     {
@@ -188,9 +200,9 @@ export const resume: {
       location: 'Vancouver, BC',
       period: 'Aug 2020 – May 2021',
       points: [
-        'Produced an ABC inventory analysis from shipping data to identify the top 20% of products by cost and units sold.',
-        'Contributed to promotional discount programs for clearance and discontinued products, lifting revenue in a competitive market.',
-        'Trained and mentored three new receivers on shipping methodology and attention to detail.',
+        'Generated an ABC Inventory Analysis Report using shipping data to determine the top 20% of high-performing products based on cost and sales units.',
+        'Contributed to the implementation of promotional discount programs for clearance and deleted products, increasing revenue levels in a competitive market.',
+        'Trained and mentored 3 new receivers to ensure a thorough understanding of shipping methodology and a focus on detail.',
       ],
     },
     {
@@ -199,17 +211,17 @@ export const resume: {
       location: 'Richmond, BC',
       period: 'Feb 2019 – Jan 2020',
       points: [
-        'Planned and ran 10×10 booth displays for events and the Asia Cosmetics trade show in Hong Kong (2019).',
-        'Maintained order, inventory and overseas-distributor spreadsheets, and handled daily invoicing in QuickBooks.',
+        'Successfully planned and executed 10 x 10 booth displays for event operations and Asia Cosmetics tradeshows in Hong Kong in 2019.',
+        'Maintained spreadsheets for orders, inventory, and overseas distributor contacts and handled daily invoicing in QuickBooks for customer inquiries.',
       ],
     },
   ],
   education: [
-    { title: 'Bachelor of Science, Mathematics', org: 'Simon Fraser University, Burnaby, BC', period: '2013 – 2018' },
+    { title: 'Bachelor of Science, Mathematics', org: 'Simon Fraser University, Burnaby, BC', period: 'September 2013 – December 2018' },
   ],
   certifications: [
-    { title: 'Certificate, Applied AI in Data Analytics', org: 'Simon Fraser University', period: 'Oct 2025 – Jan 2026' },
-    { title: 'Certificate, Applied Database Administration and Design', org: 'BCIT', period: 'Sep 2020 – Dec 2021' },
-    { title: 'Diploma, Data Science', org: 'BrainStation', period: 'Jan – Mar 2020', detail: 'Capstone: face recognition and emotion detection with CNNs.' },
+    { title: 'Certificate, Applied AI in Data Analytics', org: 'Simon Fraser University', period: 'October 2025 – January 2026' },
+    { title: 'Certificate, Applied Database Administration and Design', org: 'BCIT', period: 'September 2020 – December 2021' },
+    { title: 'Diploma, Data Science', org: 'BrainStation', period: 'January – March 2020', detail: 'Capstone: face recognition and emotion detection with CNNs.' },
   ],
 };
