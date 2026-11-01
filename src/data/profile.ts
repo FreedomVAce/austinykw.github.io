@@ -12,9 +12,9 @@ export const profile = {
     'I find where a business is losing time or money, prove it with data, and build the tool that fixes it — from SQL and dashboards to forecasting models and AI services in production.',
   /** Short professional summary used on the homepage and résumé page. */
   intro:
-    'Data analyst and machine learning developer with six years inside a building-products distributor — from inventory and pricing data to freight analytics, recommendation systems and LLM services. I combine business understanding with hands-on SQL, Python, BI and cloud implementation.',
+    'Data analyst and machine learning developer with six years in wholesale distribution and supply chain — from inventory and pricing data to freight analytics, recommendation systems and LLM services. I combine business understanding with hands-on SQL, Python, BI and cloud implementation.',
   openToWork: true,
-  lookingFor: 'Data Analyst, Data Scientist and Machine Learning roles',
+  lookingFor: 'Data Analyst, Machine Learning Engineer and AI Engineer roles',
   photo: 'images/profile_pic.jpeg',
   links: {
     linkedin: 'https://www.linkedin.com/in/austinykw/',
@@ -95,7 +95,7 @@ export const skillGroups = [
 
 export const about = {
   paragraphs: [
-    'I’m a data analyst and machine learning developer at Andrew Sheret Limited, a building-products distributor in British Columbia. My work sits where the business and the data meet: freight costs, pricing, inventory and a product catalogue of more than a million items.',
+    'I’m a data analyst and machine learning developer with six years in wholesale distribution and supply chain. My work sits where the business and the data meet: freight costs, pricing, inventory and a product catalogue of more than a million items.',
     'I started on the inventory team in 2020, moved into pricing and product data, and then into analytics and machine learning. That path is the reason my analysis tends to be practical — I know where the data comes from, which numbers people actually use, and what a model has to fit into before anyone will rely on it.',
     'Today that means three kinds of work: analysis that turns data into decisions (my freight analysis helped cut freight cost by 5% and raise recovery by 10%), automation that removes manual effort, and ML and AI services — recommendations, LLM product categorization, image classification and a chatbot backend on AWS — built into the tools my colleagues use every day.',
     'I hold a BSc in Mathematics from Simon Fraser University, with further training in data science (BrainStation), database administration (BCIT) and applied AI in data analytics (SFU).',
@@ -124,8 +124,7 @@ export const resume: {
   skills: { label: string; items: string }[];
 } = {
   profile: [
-    'Data analyst and machine learning developer with six years in a building-products distribution business. I turn operational data — freight, pricing, inventory and a 1.2-million-item product catalogue — into decisions, automation and production tools.',
-    'My work spans SQL and data-warehouse rules, Python automation, BI dashboards, forecasting and recommendation models, and LLM and AI services on FastAPI and AWS. My freight analysis helped reduce freight cost by 5% and increase recovery by 10%.',
+    'Analytics professional who bridges business operations and machine learning. With six years of experience in wholesale distribution and supply chain, I have progressed from inventory and pricing into data analysis and ML development. Combines deep knowledge of supply-chain, pricing and product data with SQL, Python, Power BI and AWS to deliver measurable results, including a 5% reduction in freight cost and a 10% increase in freight recovery. I am seeking Data Analyst, Machine Learning Engineer or AI Engineer roles where I can turn operational data into cost savings, better decisions and production-ready tools.',
   ],
   skills: [
     { label: 'Databases', items: 'SQL, SSMS, SSAS, SSRS, DuckDB' },
