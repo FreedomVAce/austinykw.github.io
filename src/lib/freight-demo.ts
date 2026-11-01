@@ -187,7 +187,7 @@ export async function mountFreightDemo(root: HTMLElement) {
   const list = $<HTMLOListElement>('.opp-list');
   for (const o of data.findings.opportunities) {
     const li = document.createElement('li');
-    const t = document.createElement('span'); t.className = 'o-title'; t.textContent = `${o.finding} — ${o.scope}, ${o.period}`;
+    const t = document.createElement('span'); t.className = 'o-title'; t.textContent = `${o.finding}: ${o.scope}, ${o.period}`;
     const a = document.createElement('span'); a.className = 'o-amt'; a.textContent = fmtMoney(o.amount);
     const b = document.createElement('span'); b.className = 'o-basis'; b.textContent = o.basis;
     li.append(t, a, b); list.appendChild(li);

@@ -7,43 +7,43 @@ const systems = [
   {
     id: 'categorize',
     title: 'Product categorization with an LLM',
-    purpose: 'New products arrive with a supplier description; someone has to file each one into the right place in a multi-level category tree.',
+    purpose: 'New products arrive with a supplier description, and each one must be assigned to the right place in a multi-level category tree.',
     steps: [
       { name: 'Product details', note: 'name, description, brand, features' },
-      { name: 'Build the prompt', note: 'the category tree + similar products already filed by staff' },
+      { name: 'Build the prompt', note: 'the category tree and similar products the team has already classified' },
       { name: 'LLM suggests a category', note: 'run locally or on AWS Bedrock', tech: 'LLM' },
-      { name: 'Check & score', note: 'is the path valid? how confident are we, from several independent signals?' },
+      { name: 'Check & score', note: 'validates the category path and scores confidence from several independent signals' },
       { name: 'Route', note: 'auto-accept · spot-check · human review', human: true },
     ],
-    loop: 'Reviewer corrections become examples for the next prompts — accuracy improves without retraining.',
+    loop: 'Reviewer corrections become examples for later prompts, so accuracy improves without retraining.',
     stack: ['Python', 'FastAPI', 'LLM (local & AWS Bedrock)', 'Docker', 'pytest'],
   },
   {
     id: 'images',
     title: 'Product image classifier',
-    purpose: 'Every product image had to be dragged into a category by hand (product shot, lifestyle, and so on) before it could go online.',
+    purpose: 'Each product image had to be sorted into a category manually, such as product shot or lifestyle image, before it could go online.',
     steps: [
       { name: 'Product images', note: 'from the catalogue' },
-      { name: 'CNN model', note: 'trained on images staff had already sorted', tech: 'ML' },
+      { name: 'CNN model', note: 'trained on images the team had already sorted', tech: 'ML' },
       { name: 'FastAPI service', note: 'returns a category and a confidence for each image' },
       { name: '"Classify images" button', note: 'inside the internal Java application' },
-      { name: 'Staff review', note: 'each prediction carries a confidence score, so uncertain images can be checked by a person', human: true },
+      { name: 'Human review', note: 'each prediction carries a confidence score, so uncertain images can be checked by a person', human: true },
     ],
-    loop: 'Built in phases: first brand by brand, using fully labelled products as ground truth, then one model across brands.',
+    loop: 'Built in phases: first brand by brand, using fully labelled products as ground truth, then a single model across all brands.',
     stack: ['Python', 'TensorFlow / Keras', 'FastAPI', 'Java integration'],
   },
   {
     id: 'chatbot',
     title: 'AI chatbot backend on AWS',
-    purpose: 'An internal assistant needed a secure, serverless way to send staff questions to a large language model.',
+    purpose: 'An internal assistant needed a secure, serverless way to send employee questions to a large language model.',
     steps: [
-      { name: 'Staff question', note: 'from the chat interface' },
+      { name: 'Employee question', note: 'from the chat interface' },
       { name: 'AWS Lambda', note: 'the function that handles each request' },
       { name: 'AWS Secrets Manager', note: 'credentials are read at run time, never stored in code' },
       { name: 'Amazon Bedrock', note: 'the foundation model that generates the answer', tech: 'LLM' },
       { name: 'Answer', note: 'returned to the user' },
     ],
-    loop: 'AWS IAM roles and policies control what the Lambda function may access — Bedrock and the stored secret.',
+    loop: 'AWS IAM roles and policies control what the Lambda function can access: Bedrock and the stored secret.',
     stack: ['AWS Lambda', 'Amazon Bedrock', 'AWS Secrets Manager', 'AWS IAM'],
   },
 ];
@@ -52,7 +52,7 @@ const systems = [
   <div class="demo-head">
     <p class="eyebrow">How it works</p>
     <h2 id="ai-title">Three AI services, step by step</h2>
-    <p class="demo-lead">Each one replaces a slow manual task, and each keeps a person in the loop where the model is unsure.</p>
+    <p class="demo-lead">Each service replaces a slow manual task and keeps a person in the loop wherever the model is uncertain.</p>
   </div>
 
   <div class="systems">

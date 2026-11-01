@@ -9,7 +9,7 @@ type Signal = (typeof SIGNALS)[number];
 type Weights = Record<Signal, number>;
 const COLORS: Record<Signal, string> = { cf: 'var(--series-1)', mba: 'var(--series-2)', content: 'var(--series-3)', curated: 'var(--series-4)' };
 const WHY: Record<Signal, string> = { cf: 'customers also buy', mba: 'bought together', content: 'matches style', curated: 'expert pairing' };
-const SEGMENT_LABEL: Record<string, string> = { trade_high: 'Trade — high volume', trade_general: 'Trade — general', retail: 'Retail', all: 'All segments' };
+const SEGMENT_LABEL: Record<string, string> = { trade_high: 'Trade, high volume', trade_general: 'Trade, general', retail: 'Retail', all: 'All segments' };
 
 type Data = {
   meta: { pop_weight: number; products: number; lines: number; invoices: number };
@@ -102,7 +102,7 @@ export async function mountRecommenderDemo(root: HTMLElement) {
     box.hidden = mode() !== 'cart';
     const ul = $<HTMLUListElement>('.cart-list');
     ul.replaceChildren();
-    if (!cart.length) { const li = document.createElement('li'); li.className = 'empty'; li.textContent = 'Empty — pick products above and add them.'; ul.appendChild(li); }
+    if (!cart.length) { const li = document.createElement('li'); li.className = 'empty'; li.textContent = 'Empty. Select products above and add them.'; ul.appendChild(li); }
     cart.forEach((i, k) => {
       const li = document.createElement('li');
       li.append(P.name[i]);
@@ -167,8 +167,8 @@ export async function mountRecommenderDemo(root: HTMLElement) {
     }),
     format: (v) => v.toFixed(3), labelWidth: 176,
   });
-  fillTable($<HTMLTableElement>('[data-table="eval"]'), ['Method', 'Trade — high', 'Trade — general', 'Retail', 'All', 'HR@10 (all)', 'Coverage'],
-    methods.map((m) => [m, ...['trade_high', 'trade_general', 'retail', 'all'].map((s) => get(m, s).ndcg.toFixed(3)),
+  fillTable($<HTMLTableElement>('[data-table="eval"]'), ['Method', 'Trade, high volume', 'Trade, general', 'Retail', 'All', 'HR@10 (all)', 'Coverage'],
+    methods.map((m) => [m.replace('Hybrid — ', 'Hybrid: '), ...['trade_high', 'trade_general', 'retail', 'all'].map((s) => get(m, s).ndcg.toFixed(3)),
       get(m, 'all').hr.toFixed(3), `${Math.round(100 * get(m, 'all').coverage)}%`]));
 
   // Wiring
@@ -192,7 +192,7 @@ export async function mountRecommenderDemo(root: HTMLElement) {
     render();
   });
   $<HTMLButtonElement>('[data-act="tuned"]').addEventListener('click', () => { applyTuned(); render(); });
-  $<HTMLButtonElement>('[data-act="default"]').addEventListener('click', () => { setWeights(data.weights.default, 'Hand-set weights — before tuning.'); render(); });
+  $<HTMLButtonElement>('[data-act="default"]').addEventListener('click', () => { setWeights(data.weights.default, 'Hand-set weights, before tuning.'); render(); });
   let raf = 0;
   new ResizeObserver(() => { cancelAnimationFrame(raf); raf = requestAnimationFrame(drawEval); }).observe($<HTMLElement>('.eval'));
   render();
