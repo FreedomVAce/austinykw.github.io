@@ -1,99 +1,87 @@
 ---
+/**
+ * Résumé: a single-column, letter-size layout that prints to two pages ("Save as PDF").
+ * All wording lives in `resume` in src/data/profile.ts.
+ */
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import { profile, resume } from '../data/profile';
 import { withBase } from '../lib/url';
 
-const { linkedin, github, email, resumePdf } = profile.links;
+const { linkedin, github, email } = profile.links;
 const strip = (u: string) => u.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+const MONTHS: Record<string, string> = { Jan: 'January', Feb: 'February', Mar: 'March', Apr: 'April', Jun: 'June', Jul: 'July', Aug: 'August', Sep: 'September', Oct: 'October', Nov: 'November', Dec: 'December' };
+const full = (p = '') => p.replace(/\b(Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/g, (m) => MONTHS[m]);
+const site = new URL(withBase(''), Astro.site).href;
+// Work dates are stored short (the About timeline uses them); the résumé spells months out.
+// Education and certifications in one list, most recently completed first.
+const ended = (when: string) => { const m = when.match(/(\w+) (\d{4})$/); return m ? new Date(`${m[1]} 1, ${m[2]}`).getTime() : 0; };
+const credentials = [
+  ...resume.education.map((e) => ({ ...e, when: full(e.period) })),
+  ...resume.certifications.map((e) => ({ ...e, when: full(e.period) })),
+].sort((a, b) => ended(b.when) - ended(a.when));
 ---
 <Base title="Résumé" description={`Résumé of ${profile.name}, ${profile.role}.`}>
   <section class="section resume-page">
     <div class="container">
       <div class="actions">
         <button type="button" class="btn btn--primary btn--sm" id="print-resume"><Icon name="file" size={16} /> Save as PDF</button>
-        {resumePdf && <a class="btn btn--ghost btn--sm" href={withBase(resumePdf)} download>Download PDF</a>}
       </div>
 
       <article class="sheet" aria-label={`Résumé of ${profile.name}`}>
         <header class="band">
           <h1>{profile.name}</h1>
           <p class="title">{profile.role.replace(' · ', ' & ')}</p>
+          <ul class="contact">
+            {email && <li><Icon name="mail" size={14} /><a href={`mailto:${email}`}>{email}</a></li>}
+            <li><Icon name="linkedin" size={14} /><a href={linkedin}>{strip(linkedin)}</a></li>
+            <li><Icon name="github" size={14} /><a href={github}>{strip(github)}</a></li>
+            <li><Icon name="pin" size={14} /><span>{profile.location}</span></li>
+          </ul>
         </header>
 
-        <div class="cols">
-          <aside class="side">
-            <section>
-              <h2>Contact</h2>
-              <ul class="contact">
-                {email && <li><Icon name="mail" size={15} /><a href={`mailto:${email}`}>{email}</a></li>}
-                <li><Icon name="linkedin" size={15} /><a href={linkedin} target="_blank" rel="noopener noreferrer">{strip(linkedin)}</a></li>
-                <li><Icon name="github" size={15} /><a href={github} target="_blank" rel="noopener noreferrer">{strip(github)}</a></li>
-                <li><Icon name="pin" size={15} /><span>{profile.location}</span></li>
-              </ul>
-            </section>
-
-            {resume.education.length > 0 && (
-              <section>
-                <h2>Education</h2>
-                {resume.education.map((e) => (
-                  <div class="item">
-                    <strong>{e.title}</strong>
-                    <span>{e.org}</span>
-                    {e.period && <span class="when">{e.period}</span>}
-                  </div>
-                ))}
-              </section>
-            )}
-
-            {resume.certifications.length > 0 && (
-              <section>
-                <h2>Certifications<br />and Licenses</h2>
-                {resume.certifications.map((e) => (
-                  <div class="item">
-                    <strong>{e.title}</strong>
-                    <span>{e.org}</span>
-                    {e.period && <span class="when">{e.period}</span>}
-                  </div>
-                ))}
-              </section>
-            )}
-
-            <section>
-              <h2>Skills</h2>
-              {resume.skills.map((s) => (
-                <p class="skill"><strong>{s.label}:</strong> {s.items}</p>
-              ))}
-            </section>
-          </aside>
-
-          <div class="main">
-            <section>
-              <h2>Profile</h2>
-              {resume.profile.map((p) => <p class="profile">{p}</p>)}
-            </section>
-
-            {resume.experience.length > 0 && (
-              <section>
-                <h2>Work Experience</h2>
-                {resume.experience.map((e) => (
-                  <div class="job">
-                    <h3>{e.role}</h3>
-                    <div class="job-meta">
-                      <span>{e.org}, {e.location}</span>
-                      <span class="when">{e.period}</span>
-                    </div>
-                    {e.note && <p class="note">{e.note}</p>}
-                    <ul>
-                      {e.points.map((pt) => typeof pt === 'string'
-                        ? <li>{pt}</li>
-                        : <li>{pt.text} <a class="cs-link" href={withBase(pt.href)}>{pt.label ?? 'Case study'} →</a></li>)}
-                    </ul>
-                  </div>
-                ))}
-              </section>
-            )}
-          </div>
+        <div class="body">
+          <section>
+            <h2>Profile</h2>
+            {resume.profile.map((p) => <p class="profile">{p}</p>)}
+          </section>
+          <section>
+            <h2>Education & Certifications</h2>
+            {credentials.map((e) => (
+              <div class="row line"><span><strong>{e.title}</strong>, {e.org}</span><span class="when">{e.when}</span></div>
+            ))}
+          </section>
+          <section>
+            <h2>Work Experience</h2>
+            {resume.experience.map((e) => (
+              <div class="job">
+                <div class="row"><h3>{e.role}</h3><span class="when">{full(e.period)}</span></div>
+                <p class="org">{e.org}, {e.location}{e.note && <span class="note"> · {e.note}</span>}</p>
+                <ul>
+                  {e.points.map((pt) => typeof pt === 'string'
+                    ? <li>{pt}</li>
+                    : <li>{pt.text} <a class="cs-link" href={withBase(pt.href)}>{pt.label ?? 'Case study'} →</a></li>)}
+                </ul>
+              </div>
+            ))}
+          </section>
+          <section>
+            <h2>Skills</h2>
+            <div class="skills-cols">
+              {resume.skills.map((s) => (<p class="skill"><strong>{s.label}:</strong> {s.items}</p>))}
+            </div>
+          </section>
+          <section>
+            <div class="row proj-head"><h2>Project Highlights</h2><p class="proj-lead">Case studies and interactive demos: <a href={site}>{strip(site)}</a></p></div>
+            <div class="projs">
+            {resume.projects.map((p) => (
+              <div class="proj">
+                <h3><a href={withBase(p.href)}>{p.title}</a></h3>
+                <p>{p.text}</p>
+              </div>
+            ))}
+            </div>
+          </section>
         </div>
       </article>
     </div>
@@ -101,90 +89,91 @@ const strip = (u: string) => u.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/
 </Base>
 
 <style>
-  .resume-page { padding-top: clamp(24px, 4vw, 40px); }
-  .resume-page {
-    --band: #86b6ef; --band-ink: #3a3f47; --side: #f3f3f3; --rule: #b9bcc2;
-  }
+  .resume-page { padding-top: clamp(24px, 4vw, 40px); --band: #86b6ef; --band-ink: #2b2f36; --rule: #c4c7cc; }
   @media (prefers-color-scheme: dark) {
-    :global(:root:not([data-theme='light'])) .resume-page { --band: #1f4f86; --band-ink: #eef0f3; --side: #171a1f; --rule: #3a404a; }
+    :global(:root:not([data-theme='light'])) .resume-page { --band: #1f4f86; --band-ink: #eef0f3; --rule: #3a404a; }
   }
-  :global(:root[data-theme='dark']) .resume-page { --band: #1f4f86; --band-ink: #eef0f3; --side: #171a1f; --rule: #3a404a; }
+  :global(:root[data-theme='dark']) .resume-page { --band: #1f4f86; --band-ink: #eef0f3; --rule: #3a404a; }
 
   .actions { display: flex; justify-content: flex-end; gap: 0.5rem; max-width: 900px; margin: 0 auto 0.75rem; }
   .sheet { max-width: 900px; margin: 0 auto; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); overflow: hidden; }
 
-  .band { background: var(--band); color: var(--band-ink); text-align: center; padding: clamp(28px, 5vw, 44px) 1rem clamp(22px, 4vw, 32px); }
+  .band { background: var(--band); color: var(--band-ink); text-align: center; padding: clamp(26px, 5vw, 40px) 1rem clamp(18px, 3vw, 24px); }
   .band h1 { font-family: var(--font-sans); font-weight: 400; color: var(--band-ink); font-size: clamp(1.9rem, 5vw, 2.8rem); letter-spacing: 0.32em; text-transform: uppercase; margin-right: -0.32em; }
-  .band .title { margin-top: 0.6rem; font-size: 0.9rem; letter-spacing: 0.3em; text-transform: uppercase; margin-right: -0.3em; }
+  .band .title { margin-top: 0.5rem; font-size: 0.9rem; letter-spacing: 0.28em; text-transform: uppercase; margin-right: -0.28em; }
+  .contact { list-style: none; padding: 0; margin-top: 1rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem 1.4rem; font-size: 0.88rem; }
+  .contact li { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .contact a { color: var(--band-ink); text-decoration: none; }
+  .contact a:hover { text-decoration: underline; }
 
-  .cols { display: grid; grid-template-columns: 32% minmax(0, 1fr); }
-  .side { background: var(--side); padding: 1.6rem 1.4rem; }
-  .main { padding: 1.6rem 1.8rem; }
-  .side section + section, .main section + section { border-top: 1.5px dashed var(--rule); margin-top: 1.3rem; padding-top: 1.3rem; }
+  .body { padding: 1.6rem 2rem 1.8rem; }
+  .body > section + section { border-top: 1.5px dashed var(--rule); margin-top: 1.2rem; padding-top: 1.2rem; }
+  h2 { font-family: var(--font-sans); font-weight: 600; font-size: 0.95rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink); margin-bottom: 0.7rem; }
+  .profile { font-size: 0.95rem; color: var(--ink-2); }
 
-  h2 { font-family: var(--font-sans); font-weight: 500; font-size: 0.95rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ink); margin-bottom: 0.9rem; }
 
-  .contact { list-style: none; padding: 0; display: grid; gap: 0.6rem; font-size: 0.86rem; }
-  .contact li { display: flex; align-items: center; gap: 0.55rem; color: var(--ink-2); overflow-wrap: anywhere; }
-  .contact :global(svg) { flex: none; color: var(--muted); }
-  .contact a { color: var(--ink-2); text-decoration: none; }
-  .contact a:hover { color: var(--accent); text-decoration: underline; }
-
-  .item { display: grid; gap: 0.05rem; font-size: 0.86rem; color: var(--ink-2); }
-  .item + .item { margin-top: 0.9rem; }
-  .item strong { color: var(--ink); font-weight: 600; }
-  .when { color: var(--muted); font-size: 0.82rem; }
-  .skill { font-size: 0.84rem; color: var(--ink-2); line-height: 1.5; }
-  .skill + .skill { margin-top: 0.55rem; }
-  .skill strong { color: var(--ink); }
-
-  .profile { font-size: 0.92rem; color: var(--ink-2); }
-  .profile + .profile { margin-top: 0.5rem; }
-  .job + .job { margin-top: 1.15rem; }
-  .job h3 { font-size: 1rem; font-weight: 600; color: var(--ink); }
-  .job-meta { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; font-size: 0.8rem; color: var(--muted); margin: 0.1rem 0 0.4rem; }
-  .note { font-size: 0.8rem; font-style: italic; color: var(--muted); margin: -0.25rem 0 0.4rem; }
-  .job ul { padding-left: 1.2rem; display: grid; gap: 0.3rem; font-size: 0.88rem; color: var(--ink-2); }
+  .skills-cols { column-count: 2; column-gap: 2rem; }
+  .skill { font-size: 0.88rem; color: var(--ink-2); break-inside: avoid; margin-bottom: 0.35rem; }
+  .skill strong { color: var(--ink); font-weight: 600; }
+  .row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+  .when { color: var(--muted); font-size: 0.85rem; white-space: nowrap; }
+  .job + .job { margin-top: 0.95rem; }
+  .job h3, .proj h3 { font-size: 1rem; font-weight: 600; color: var(--ink); }
+  .proj h3 a { color: var(--ink); text-decoration: none; }
+  .org { font-size: 0.86rem; color: var(--muted); margin: 0.05rem 0 0.35rem; }
+  .note { font-style: italic; }
+  .job ul { padding-left: 1.2rem; display: grid; gap: 0.25rem; font-size: 0.9rem; color: var(--ink-2); }
   .cs-link { font-size: 0.78rem; font-weight: 600; white-space: nowrap; text-decoration: none; }
-  .cs-link:hover { text-decoration: underline; }
+  .proj-lead { font-size: 0.86rem; color: var(--muted); }
+  .proj-head { margin-bottom: 0.7rem; }
+  .proj-head h2 { margin-bottom: 0; }
+  .proj p { font-size: 0.9rem; color: var(--ink-2); }
+
+  .projs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem 2rem; }
+  .line { font-size: 0.9rem; color: var(--ink-2); }
+  .line + .line { margin-top: 0.3rem; }
+  .line strong { color: var(--ink); font-weight: 600; }
 
   @media (max-width: 760px) {
-    .cols { grid-template-columns: minmax(0, 1fr); }
-    .side { order: 2; border-top: 1.5px dashed var(--rule); }
-    .main, .side { padding: 1.3rem 1.1rem; }
-  }
+    .body { padding: 1.3rem 1.1rem; }
+    .projs { grid-template-columns: minmax(0, 1fr); }
+    .skills-cols { column-count: 1; }
+    }
 
-  /* Print / "Save as PDF": a two-column letter-size résumé like the original document. */
   @media print {
-    @page { size: letter; margin: 0.4in; }
+    @page { size: letter; margin: 0.35in 0.4in; }
     :global(html), :global(body) { background: #fff !important; }
     :global(.site-header), :global(.site-footer), :global(.skip-link), .actions, .cs-link { display: none !important; }
-    .resume-page { padding: 0 !important; --band: #86b6ef; --band-ink: #3a3f47; --side: #f3f3f3; --rule: #b9bcc2; }
+    .resume-page { padding: 0 !important; --band: #86b6ef; --band-ink: #2b2f36; --rule: #c4c7cc; }
     .resume-page :global(.container) { padding: 0 !important; max-width: none !important; }
     .sheet { border: 0; box-shadow: none; max-width: none; }
-    .sheet, .sheet * { color-adjust: exact; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .sheet { --ink: #1f2328; --ink-2: #3d424c; --muted: #5f6672; --surface: #fff; }
-    .cols { grid-template-columns: 32% 1fr !important; }
-    .side { order: 0 !important; border-top: 0 !important; }
-    /* Compact print typography so the résumé fits two pages, like the original. */
-    .sheet { font-size: 9pt; line-height: 1.35; }
-    .band { padding: 20pt 0 14pt; }
+    .sheet, .sheet * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .sheet { --ink: #16191d; --ink-2: #2b2f36; --muted: #4b515b; --surface: #fff; font-size: 9pt; line-height: 1.28; }
+    .band { padding: 15pt 0 10pt; }
     .band h1 { font-size: 24pt; }
-    .band .title { font-size: 8.5pt; margin-top: 4pt; }
-    .side, .main { padding: 14pt 14pt; }
-    .side section + section, .main section + section { margin-top: 10pt; padding-top: 10pt; }
-    h2 { font-size: 9.5pt; margin-bottom: 6pt; break-after: avoid; }
-    .contact { gap: 4pt; font-size: 8.5pt; }
-    .item, .skill, .profile, .job ul, .when, .job-meta, .note { font-size: 8.5pt; }
-    .item + .item { margin-top: 6pt; }
-    .skill + .skill { margin-top: 3pt; }
-    .job + .job { margin-top: 8pt; }
-    .job h3 { font-size: 10pt; break-after: avoid; }
-    .job-meta { margin: 0 0 2pt; break-after: avoid; }
-    .job ul { gap: 1.5pt; }
-    .job li { break-inside: avoid; }
-    .contact a { color: #3d424c !important; }
-  }
+    .band .title { font-size: 8.5pt; margin-top: 3pt; }
+    .contact { margin-top: 8pt; font-size: 9pt; gap: 2pt 16pt; }
+    .body { padding: 12pt 16pt 0; }
+    .body > section + section { margin-top: 8pt; padding-top: 8pt; }
+    h2 { font-size: 10pt; margin-bottom: 6pt; break-after: avoid; }
+    .profile, .job ul, .proj p { font-size: 9pt; }
+    .when, .org, .proj-lead { font-size: 8.5pt; }
+        .job + .job { margin-top: 6pt; }
+    .job h3, .proj h3 { font-size: 10pt; }
+    .job .row, .org { break-after: avoid; }
+    .line { break-after: auto; }
+    .job ul { gap: 2pt; }
+    .job li, .proj { break-inside: avoid; }
+    .proj-lead a { color: var(--ink-2); }
+    /* The letter page is narrower than the phone breakpoint, so restore the two-column layouts. */
+    .projs { grid-template-columns: 1fr 1fr !important; }
+    .skills-cols { column-count: 2 !important; column-gap: 18pt; }
+    .skill { font-size: 9pt; margin-bottom: 2.5pt; }
+      .projs { gap: 7pt 18pt; }
+    .proj-head { margin-bottom: 6pt; }
+      .line { font-size: 9pt; }
+    .line + .line { margin-top: 2pt; }
+        }
 </style>
 
 <script>
