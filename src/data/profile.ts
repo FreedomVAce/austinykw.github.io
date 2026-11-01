@@ -9,10 +9,10 @@ export const profile = {
   location: 'Vancouver, BC',
   /** Homepage hero: who I am and what I deliver, in one or two sentences. */
   tagline:
-    'I find where a business is losing time or money, prove it with data, and build the tool that fixes it — from SQL and dashboards to forecasting models and AI services in production.',
+    'I turn operational data into measurable savings, from SQL analysis and dashboards to forecasting models and AI services in production.',
   /** Short professional summary used on the homepage and résumé page. */
   intro:
-    'Data analyst and machine learning developer with six years in wholesale distribution and supply chain — from inventory and pricing data to freight analytics, recommendation systems and LLM services. I combine business understanding with hands-on SQL, Python, BI and cloud implementation.',
+    'Data analyst and machine learning developer with six years in wholesale distribution and supply chain, working across inventory and pricing data, freight analytics, recommendation systems and LLM services. I combine business understanding with hands-on SQL, Python, BI and cloud implementation.',
   openToWork: true,
   lookingFor: 'Data Analyst, Machine Learning Engineer and AI Engineer roles',
   photo: 'images/profile_pic.jpeg',
@@ -30,18 +30,18 @@ export const profile = {
 
 /** Proof points under the homepage hero. Only verifiable, résumé-backed facts. */
 export const proof = [
-  { value: '6 yrs', label: 'in distribution data — inventory, pricing, freight and product catalogue' },
+  { value: '6 yrs', label: 'in distribution data: inventory, pricing, freight and product catalogue' },
   { value: '−5% / +10%', label: 'freight cost and freight recovery, from my freight analysis' },
-  { value: '1.2M+', label: 'product records maintained, with Python automation saving ~10 h a week' },
+  { value: '1.2M+', label: 'product records maintained, with Python automation saving about 10 hours a week' },
   { value: '4', label: 'ML and AI systems built: recommendations, LLM categorization, image classification, chatbot backend' },
 ];
 
 /** "What I do" on the homepage: analytics + data science + business understanding + implementation. */
 export const capabilities = [
-  { icon: 'chart', title: 'Find the money', text: 'Freight, pricing and inventory analysis that ties every number to a cost, a saving or a decision.' },
-  { icon: 'database', title: 'Make the data reliable', text: 'SQL, data-warehouse rules and automated cleaning, so reports and models start from data people trust.' },
-  { icon: 'sparkles', title: 'Predict and recommend', text: 'Forecasting, segmentation and recommendation models, always measured against a simple baseline.' },
-  { icon: 'box', title: 'Ship it', text: 'Models served through FastAPI, LLM services and AWS — built into the tools teams already use.' },
+  { icon: 'chart', title: 'Analytics', text: 'Freight, pricing and inventory analysis that ties every number to a cost, a saving or a decision.' },
+  { icon: 'database', title: 'Data Engineering', text: 'SQL, data-warehouse rules and automated cleaning, so reports and models start from data people trust.' },
+  { icon: 'sparkles', title: 'Machine Learning', text: 'Forecasting, segmentation and recommendation models, always measured against a simple baseline.' },
+  { icon: 'box', title: 'Deployment', text: 'Models served through FastAPI, LLM services and AWS, built into the tools teams already use.' },
 ];
 
 /** Tags available to the project filter. Project files must use these exact strings. */
@@ -84,7 +84,7 @@ export const skillGroups = [
   {
     title: 'Machine Learning & AI',
     items: ['scikit-learn', 'TensorFlow / Keras', 'PyTorch', 'Recommender systems', 'LLMs', 'NLP'],
-    detail: 'Recommendation, classification and LLM solutions — from training to production.',
+    detail: 'Recommendation, classification and LLM solutions, from training to production.',
   },
   {
     title: 'Cloud & Delivery',
@@ -96,12 +96,12 @@ export const skillGroups = [
 export const about = {
   paragraphs: [
     'I’m a data analyst and machine learning developer with six years in wholesale distribution and supply chain. My work sits where the business and the data meet: freight costs, pricing, inventory and a product catalogue of more than a million items.',
-    'I started on the inventory team in 2020, moved into pricing and product data, and then into analytics and machine learning. That path is the reason my analysis tends to be practical — I know where the data comes from, which numbers people actually use, and what a model has to fit into before anyone will rely on it.',
-    'Today that means three kinds of work: analysis that turns data into decisions (my freight analysis helped cut freight cost by 5% and raise recovery by 10%), automation that removes manual effort, and ML and AI services — recommendations, LLM product categorization, image classification and a chatbot backend on AWS — built into the tools my colleagues use every day.',
+    'I started on the inventory team in 2020, moved into pricing and product data, and then into analytics and machine learning. That path keeps my analysis practical: I know where the data comes from, which numbers people actually use, and what a model must fit into before anyone will rely on it.',
+    'Today my work covers three areas: analysis that turns data into decisions, such as freight analysis that helped cut freight cost by 5% and raise recovery by 10%; automation that removes manual effort; and ML and AI services built into the tools my colleagues use every day, including recommendations, LLM product categorization, image classification and a chatbot backend on AWS.',
     'I hold a BSc in Mathematics from Simon Fraser University, with further training in data science (BrainStation), database administration (BCIT) and applied AI in data analytics (SFU).',
   ],
   strengths: [
-    { title: 'Business first', text: 'I start from the cost, the decision or the bottleneck — then choose the data and method.' },
+    { title: 'Business first', text: 'I start from the cost, the decision or the bottleneck, then choose the data and method.' },
     { title: 'Analysis to implementation', text: 'I take work from the SQL query to the dashboard, model or API that people use.' },
     { title: 'Evidence over claims', text: 'Baselines, holdout tests and clear limits, so results stand up to questions.' },
   ],
