@@ -30,10 +30,10 @@ export const profile = {
 
 /** Proof points under the homepage hero. Only verifiable, résumé-backed facts. */
 export const proof = [
-  { value: '6 yrs', label: 'in distribution data: inventory, pricing, freight and product catalogue' },
-  { value: '−5% / +10%', label: 'freight cost and freight recovery, from my freight analysis' },
-  { value: '1.2M+', label: 'product records maintained, with Python automation saving about 10 hours a week' },
-  { value: '4', label: 'ML and AI systems built: recommendations, LLM categorization, image classification, chatbot backend' },
+  { value: '6 years', label: 'of turning operational data into decisions across inventory, pricing, logistics and product information' },
+  { value: '−5% / +10%', label: 'reduction in freight cost and increase in freight recovery, from my analysis' },
+  { value: '1.2 Million+', label: 'product records managed, with Python automation saving about 10 hours a week' },
+  { value: '4', label: 'machine learning and AI services built: product recommendations, LLM categorization, image classification and a chatbot backend' },
 ];
 
 /** "What I do" on the homepage: analytics + data science + business understanding + implementation. */
