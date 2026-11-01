@@ -10,12 +10,12 @@ type Data = { face: Task; emotion: Task };
 
 const NOTES = {
   face: {
-    curve: 'Training and test accuracy stay within a point of each other (99.2% vs 98.5% at epoch 10), so the model is not overfitting. Caveat: the test set was also used as validation data during training, and neighbouring webcam frames are near-duplicates — real-world accuracy on new sessions would be lower.',
-    cm: 'Only 22 of 1,440 test images are misclassified, and every error involves the “Unknown” class — the model never confuses the two known people with each other.',
+    curve: 'Training and test accuracy stay within a point of each other (99.2% vs 98.5% at epoch 10), so the model is not overfitting. Caveat: the test set was also used as validation data during training, and neighbouring webcam frames are near duplicates, so real-world accuracy on new sessions would be lower.',
+    cm: 'Only 22 of 1,440 test images are misclassified, and every error involves the “Unknown” class; the model never confuses the two known people with each other.',
     base: 'PCA + KNN (eigenfaces) already reaches 95%: with one person per class under similar lighting, the task is easy. The CNN closes most of the remaining gap.',
   },
   emotion: {
-    curve: 'Test loss is still falling at epoch 20 and training accuracy (64%) is close to test accuracy (62%): the model was still learning, not overfitting — more epochs, augmentation or a pretrained backbone would likely help.',
+    curve: 'Test loss is still falling at epoch 20 and training accuracy (64%) is close to test accuracy (62%): the model was still learning, not overfitting. More epochs, augmentation or a pretrained backbone would likely help.',
     cm: 'Fear is the hardest emotion: only 25% are recognised and 28% are predicted as sad. Sad absorbs errors from fear, neutral and angry faces, which is why its precision (44%) is the lowest.',
     base: 'Seven classes make random guessing 14%, and always predicting “happy” scores 26%. The CNN reaches 62%, close to the roughly 65% human accuracy reported for FER-2013 (Goodfellow et al., 2013).',
   },

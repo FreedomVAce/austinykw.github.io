@@ -8,7 +8,7 @@ const parquetUrl = withBase('data/freight-shipments.parquet');
     <p class="eyebrow">Interactive demo</p>
     <h2 id="fr-demo-title">Freight recovery dashboard</h2>
     <p class="demo-lead">
-      Filter by year, region and carrier to see where freight is recovered and where it leaks. Built on four years of
+      Filter by year, region and carrier to see where freight is recovered and where it is lost. Built on four years of
       simulated carrier and customer invoices with the same structure as the production data.
     </p>
   </div>
@@ -64,7 +64,7 @@ const parquetUrl = withBase('data/freight-shipments.parquet');
           <li><span class="sw" style="border-color: var(--series-2)"></span><span data-k="ratioLegend2">–</span></li>
         </ul>
       </figcaption>
-      <p class="fine ratio-note">Customer freight charged ÷ carrier cost, all branches. Below 1.0 the freight loses money.</p>
+      <p class="fine ratio-note">Customer freight charged ÷ carrier cost, all branches. Below 1.0, freight is charged at a loss.</p>
       <div class="chart" data-chart="ratio" aria-hidden="true"></div>
       <div class="tooltip" role="tooltip" hidden></div>
       <details class="table-view"><summary>Show data table</summary>
@@ -73,7 +73,7 @@ const parquetUrl = withBase('data/freight-shipments.parquet');
 
     <section class="findings" aria-labelledby="fr-find-title">
       <h3 id="fr-find-title">What the analysis found</h3>
-      <p class="fine">Each finding is detected by the SQL — no names are hard-coded — and sized against peer branches or carriers, not an arbitrary target.</p>
+      <p class="fine">Each finding is detected by the SQL with no names hard-coded, and sized against peer branches or carriers rather than an arbitrary target.</p>
       <ol class="opp-list"></ol>
     </section>
 

@@ -36,7 +36,7 @@ const STATE: Record<string, { fmt: (v: number) => string; asc?: boolean; max?: n
 const CAT: Record<string, { fmt: (v: number) => string; asc?: boolean; max?: number; note: string }> = {
   revenue: { fmt: brl, note: 'Top 15 categories by product revenue.' },
   avg_review: { fmt: (v) => v.toFixed(2), asc: true, max: 5, note: 'Lowest-rated 15 categories with at least 300 orders.' },
-  freight_ratio: { fmt: (v) => fmtPct(v, 0), note: 'Freight as a share of product value — highest 15 categories with at least 300 orders.' },
+  freight_ratio: { fmt: (v) => fmtPct(v, 0), note: 'Freight as a share of product value, for the 15 highest categories with at least 300 orders.' },
 };
 
 export async function mountEcommerceDemo(root: HTMLElement) {
@@ -125,7 +125,7 @@ export async function mountEcommerceDemo(root: HTMLElement) {
       el('text', { x: Math.min(x(r.ci_high) + 8, W - pad.r + 8), y: yy + 4 }, g).textContent = `${r.odds_ratio.toFixed(r.odds_ratio < 10 ? 2 : 1)}×`;
     });
     const ws = data.stats.within_seller;
-    set('forestNote', `n = ${fmtNum(data.stats.fit.n)} delivered, reviewed orders. Each odds ratio holds the other factors constant; hollow dots are not distinguishable from no effect. Comparing only orders from the same seller (${fmtNum(ws.strata)} sellers), late delivery still has ${ws.odds_ratio.toFixed(1)}× the odds (95% CI ${ws.ci_low.toFixed(1)}–${ws.ci_high.toFixed(1)}). Observational data — association, not proof of cause.`);
+    set('forestNote', `n = ${fmtNum(data.stats.fit.n)} delivered, reviewed orders. Each odds ratio holds the other factors constant; hollow dots are not distinguishable from no effect. Comparing only orders from the same seller (${fmtNum(ws.strata)} sellers), late delivery still has ${ws.odds_ratio.toFixed(1)}× the odds (95% CI ${ws.ci_low.toFixed(1)}–${ws.ci_high.toFixed(1)}). This is observational data, so it shows association, not proof of cause.`);
   }
 
   function drawBars(kind: 'states' | 'categories') {
