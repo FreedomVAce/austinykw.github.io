@@ -42,7 +42,7 @@ A distributor's catalogue is only useful when every product sits in the right ca
 
 ## 3 · AI chatbot backend on AWS
 
-- **What it does:** gives an internal assistant a secure way to send employee questions to a large language model and return the answer.
+- **What it does:** gives an internal assistant a secure way to transfer employee questions to a large language model and return the answer.
 - **How:** an **AWS Lambda** function handles each request and calls a foundation model on **Amazon Bedrock**. Its credentials are stored in **AWS Secrets Manager** and read at run time, never written into code. **AWS IAM** roles and policies define what the function can access.
 - **Why this design:** a serverless setup has nothing to keep running between requests, and access is controlled in one place.
 
