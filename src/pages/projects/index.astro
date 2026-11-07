@@ -7,14 +7,14 @@ import { getProjects } from '../../lib/projects';
 const projects = await getProjects();
 const used = SKILLS.filter((s) => projects.some((p) => p.data.skills.includes(s)));
 ---
-<Base title="Projects" description="Data analytics, forecasting and machine-learning case studies by Austin Yu.">
+<Base title="Projects" description="Data analytics, forecasting and machine learning case studies by Austin Yu.">
   <section class="section">
     <div class="container">
       <div class="section-head">
-        <p class="eyebrow">Portfolio</p>
+        <p class="eyebrow">My work</p>
         <h1 class="section-title">Projects</h1>
         <p class="section-lead">
-          Work projects from my roles in distribution analytics and machine learning, and independent projects built on public data. Each case study covers the business problem, my approach, the result and an interactive demo or detailed results.
+          Projects from my analytics and machine learning roles, plus independent work on public datasets. Select a skill to see the projects that use it.
         </p>
       </div>
 
