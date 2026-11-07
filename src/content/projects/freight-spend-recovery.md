@@ -1,6 +1,6 @@
 ---
 title: Freight Spend & Recovery
-summary: Identified where freight costs were eroding margin and gave finance and logistics a single view of freight spend and the amount recovered from customers.
+summary: Identified where freight costs were reducing margin and built a single view of freight spend and customer recoveries for the finance and logistics teams.
 category: BI & Cost Analytics
 order: 2
 featured: true
