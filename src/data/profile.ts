@@ -101,9 +101,9 @@ export const about = {
     'I hold a BSc in Mathematics from Simon Fraser University, with further training in data science (BrainStation), database administration (BCIT) and applied AI in data analytics (SFU).',
   ],
   strengths: [
-    { title: 'Business first', text: 'I start from the cost, the decision or the bottleneck, then choose the data and method.' },
-    { title: 'Analysis to implementation', text: 'I take work from the SQL query to the dashboard, model or API that people use.' },
-    { title: 'Evidence over claims', text: 'Baselines, holdout tests and clear limits, so results stand up to questions.' },
+    { title: 'Starting from the business need', text: 'I start with the business problem, whether it’s a cost to reduce, a decision to support or a bottleneck to remove, and then choose the right data and method.' },
+    { title: 'Analysis to implementation', text: 'I bridge the gap between analysis and implementation, delivering dashboards, models and services that teams rely on.' },
+    { title: 'Clear communication', text: 'I turn complex analysis into clear and practical insights that non-technical teams can easily understand and act on accordingly.' },
   ],
 };
 
