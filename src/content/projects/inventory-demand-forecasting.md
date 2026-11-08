@@ -46,10 +46,14 @@ Select a product and branch to compare models on four years of sales, and adjust
 | SARIMA | −11% |
 
 - Every model outperforms the baseline at every horizon; one month ahead, the best model reduces error by about 16%.
-- No single model performs best everywhere, so the demo compares models for each series instead of declaring one winner.
+- The best model varies by product and branch.
 - A low-volume product (about 10 units a month) is difficult to forecast monthly, which indicates the need for a different method rather than further tuning.
 - The simulated seasonality is regular, which favours seasonal regression; on real data, the adaptive models would likely close the gap.
 
 ## How it works
 
 Python and pandas rebuild stock positions (a stock count resets the on-hand balance, and movements accumulate in between), statsmodels fits the models, and a rolling-origin backtest refits every model at each of 12 month-ends. A suite of 36 automated tests checks parsing, stock reconstruction, the models and the reorder calculations.
+
+## What I learned
+
+There is rarely one best model. Each one won on different products and branches, so comparing them series by series against a simple baseline gave buyers more useful forecasts than picking a single winner.

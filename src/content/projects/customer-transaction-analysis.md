@@ -48,10 +48,14 @@ Select a segment to highlight its customers, and explore the retention heatmap a
 
 - Most customers are lost at the second order: only 15 to 24% of each month's new customers purchase again the following month.
 - Retention is seasonal rather than a steady decline, and every cohort peaks in November, before Christmas.
-- As a pure predictor, the segments match order count alone (AUC 0.71 vs 0.72), and a simple model performs slightly better (0.74). Their value is that they are easy to act on and explain.
+- As a pure predictor, the segments match order count alone (AUC 0.71 vs 0.72), and a simple model performs slightly better (0.74).
 
 ## How it works
 
 SQL in DuckDB handles cleaning, features and cohorts, using exact decimal values and stable row IDs so results are identical on every run; scikit-learn runs K-Means with bootstrap stability checks. A suite of 13 automated tests includes one confirming that no information from after the cut-off date leaks into the segments.
+
+## What I learned
+
+A segmentation is only useful if people can act on it. As a pure predictor, my segments did no better than order count alone, but they turn customers into clear groups with a specific action for each, which a single number cannot do.
 
 *Data: [Online Retail](https://doi.org/10.24432/C5BW33) by D. Chen (UCI Machine Learning Repository, 2015), licensed CC BY 4.0.*

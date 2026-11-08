@@ -53,4 +53,8 @@ Switch metrics on each chart. The middle row presents the main finding: how revi
 
 SQL in DuckDB handles staging, the order model and all descriptive tables; Python with statsmodels and SciPy runs a Mann–Whitney test, logistic regression (n = 95,082) and a Mantel–Haenszel within-seller comparison. Because this is observational data, the evidence is strong but shows association rather than proof of cause.
 
+## What I learned
+
+A finding is only convincing once the obvious alternatives are ruled out. Testing whether distance, order size or seller quality explained the negative reviews, and comparing orders from the same seller, made the case that late delivery was the real driver.
+
 *Data: [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) (Kaggle, 2018), licensed CC BY-NC-SA 4.0.*
