@@ -97,7 +97,7 @@ export const about = {
   paragraphs: [
     'I’m a data analyst and machine learning developer with six years in wholesale distribution and supply chain. My work sits where the business and the data meet: freight costs, pricing, inventory and a product catalogue of more than a million items.',
     'I started on the inventory team in 2020, moved into pricing and product data, and then into analytics and machine learning in recent years. That path keeps my analysis practical: I know where the data comes from, which numbers people actually use, and what a model must fit into before anyone will rely on it.',
-    'Today my work covers three areas: analysis that turns data into decisions, such as freight analysis that helped cut freight cost by 5% and raise recovery by 10%; automation that removes manual effort; and ML and AI services built into the tools my colleagues use every day, including recommendations, LLM product categorization, image classification and a chatbot backend on AWS.',
+    'My work covers three areas: analysis that turns data into decisions, such as freight analysis that helped cut freight cost by 5% and raise recovery by 10%; automation that removes manual effort; and ML and AI services built into the tools my colleagues use every day, including recommendations, LLM product categorization, image classification and a chatbot backend on AWS.',
     'I hold a BSc in Mathematics from Simon Fraser University, with further training in data science (BrainStation), database administration (BCIT) and applied AI in data analytics (SFU).',
   ],
   strengths: [
