@@ -12,7 +12,7 @@ export const profile = {
     'I bridge business operations and machine learning, turning operational data into cost savings, better decisions and production-ready tools.',
   /** Short professional summary used on the homepage and résumé page. */
   intro:
-    'Data analyst and machine learning developer with six years in wholesale distribution and supply chain, working across inventory and pricing data, freight analytics, recommendation systems and LLM services. I combine business understanding with hands-on SQL, Python, BI and cloud implementation.',
+    'Every project starts with a business question and ends with something people can use, whether that’s a dashboard, a forecast or an AI service built on SQL, Python and AWS.',
   openToWork: true,
   lookingFor: 'Data Analyst, Machine Learning Engineer and AI Engineer roles',
   photo: 'images/profile_pic.jpeg',
