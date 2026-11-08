@@ -1,6 +1,6 @@
 ---
 title: Freight Spend & Recovery
-summary: Identified where freight costs were reducing margin and built a single view of freight spend and customer recoveries for the finance and logistics teams.
+summary: Identified where freight costs were reducing margin and built a single view of freight spend and customer recoveries for the freight team.
 category: BI & Cost Analytics
 order: 2
 featured: true
@@ -13,7 +13,7 @@ skills: [SQL, Dashboards, Data Pipelines, Python]
 demo: freight-dashboard
 glance:
   problem: Freight is one of a distributor's largest costs, but carrier bills and the freight charged to customers sat in separate systems. There was no reliable way to measure how much was being recovered or where it was being lost.
-  did: Matched every carrier charge to a shipment and to the amount billed to the customer, broke the unrecovered amount down by cause, and built monthly and yearly reporting for finance and logistics.
+  did: Matched every carrier charge to a shipment and to the amount billed to the customer, broke the unrecovered amount down by cause, and built monthly and yearly reporting for the freight team.
   result: Freight cost fell by 5% and freight recovered from customers rose by 10%. The reporting also surfaced billing errors and undercharged shipments for follow-up.
 metrics:
   - { value: '−5%', label: 'freight cost' }
@@ -31,7 +31,7 @@ For a multi-branch distributor, every freight dollar that is not recovered reduc
 - **A single reconciled view.** Matched every carrier invoice line to a shipment and to the customer's freight charge, including lines with incomplete or missing shipment references.
 - **A breakdown of the gap.** Assigned each unrecovered dollar to one cause: free-freight thresholds, discretionary waivers, credits, undercharging, or delivered pricing that does not cover the cost.
 - **Findings with a dollar value.** Built one check per leak type (waivers well above peers, outdated branch freight tables, carrier increases not passed on, duplicate billing and credit spikes), each sized against comparable branches or carriers.
-- **Reporting** that finance and logistics review monthly and yearly.
+- **Reporting** that the freight team reviews monthly and yearly.
 
 ## Try the demo
 

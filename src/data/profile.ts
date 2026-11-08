@@ -64,32 +64,32 @@ export const skillGroups = [
   {
     title: 'Analysis & BI',
     items: ['Power BI & DAX', 'Dundas BI', 'Tableau', 'Excel & Power Query'],
-    detail: 'Freight, pricing and inventory analytics and the dashboards finance and operations act on.',
+    detail: 'Cost, pricing and inventory analysis, with dashboards that help purchasing and data teams make decisions.',
   },
   {
     title: 'Databases & SQL',
     items: ['SQL (CTEs, window functions)', 'SSMS · SSAS · SSRS', 'DuckDB', 'Data-warehouse rules'],
-    detail: 'Querying, modelling and cleaning large product, pricing and transaction tables.',
+    detail: 'Querying, structuring and cleaning large datasets, from product catalogues to sales transactions.',
   },
   {
     title: 'Python & Automation',
     items: ['pandas', 'NumPy', 'SciPy', 'pytest', 'Docker'],
-    detail: 'Repeatable pipelines and automated data-quality checks that replace manual work.',
+    detail: 'Python pipelines and automated quality checks that save hours of manual work.',
   },
   {
     title: 'Statistics & Forecasting',
     items: ['Regression', 'Hypothesis testing', 'A/B tests', 'Holt-Winters', 'SARIMA'],
-    detail: 'Forecasts and tests that are backtested and compared against simple baselines.',
+    detail: 'Forecasting and statistical analysis that help teams plan ahead with confidence.',
   },
   {
     title: 'Machine Learning & AI',
     items: ['scikit-learn', 'TensorFlow / Keras', 'PyTorch', 'Recommender systems', 'LLMs', 'NLP'],
-    detail: 'Recommendation, classification and LLM solutions, from training to production.',
+    detail: 'Recommendation, classification and LLM solutions that automate repetitive decisions, making workflows faster and more efficient.',
   },
   {
     title: 'Cloud & Delivery',
     items: ['AWS (Bedrock, Lambda, IAM, Secrets Manager)', 'FastAPI', 'Git & GitHub', 'Jira (Agile)', 'Figma'],
-    detail: 'Serving models as APIs, user stories and acceptance criteria, and UX concepts with developers.',
+    detail: 'Closing the gap between data and the business, from AWS deployment to user stories and design with developers.',
   },
 ];
 
