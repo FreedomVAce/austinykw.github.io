@@ -14,9 +14,9 @@ demo: recommender
 glance:
   problem: Customers buying a faucet also need the matching drain, valves and supply lines, but in a catalogue of tens of thousands of parts they often miss them. The business needed recommendations that increase basket size and help customers find the right parts.
   did: 'Built a recommendation engine that combines four signals: products bought together, products bought by similar customers, product attributes and expert-curated pairings. The blend is tuned for each customer segment and served through an API.'
-  result: Tested on later orders it had never seen, the tuned blend ranked the correct product about 3× better than recommending best sellers, and drew on far more of the catalogue than any single method.
+  result: Tested on later orders it had never seen, the tuned blend ranked the correct product about 3 times better than recommending best sellers, and drew on far more of the catalogue than any single method.
 metrics:
-  - { value: '3.2×', label: 'better ranking than best sellers', note: 'offline test, demo data' }
+  - { value: '3.2 times', label: 'better ranking than best sellers', note: 'offline test, demo data' }
   - { value: '77%', label: 'of the catalogue recommended, vs 57% for the best single method', note: 'demo data' }
   - { value: '4 signals', label: 'blended and tuned for each customer segment' }
 icon: sparkles
@@ -47,10 +47,14 @@ The blend was tuned on one period and evaluated on a later period it had never s
 | Blend with hand-picked weights | 0.320 | 61% |
 | **Blend tuned per segment** | **0.362** | **77%** |
 
-- Hand-picked weights performed *worse* than the best single signal; a blend only adds value once it is tuned against held-out data.
+- Hand-picked weights scored 0.320, below the best single signal at 0.342.
 - The tuned blend ranks the correct product higher (+0.020, 95% CI +0.015 to +0.025) rather than finding it more often in the top ten.
 - On simulated data, the data generator influences which method wins. What transfers to production is the method: tune on one period, report on another and compare against baselines. The next production step is an A/B test on add-to-cart rate and basket value.
 
 ## How it works
 
 Signals are built with sparse matrices (SciPy) and stored as product-to-product score tables, and the blend weights are grid-searched for each segment. Finish variants of any product on the page or in the cart are excluded. A suite of 18 automated tests covers the signals, the ranking calculations, the time split and the API.
+
+## What I learned
+
+Combining signals only helps once the blend is tested against data it has not seen. My first hand-picked weights performed worse than the best single signal, and it was the tuning against later orders that made the blend worthwhile. Measuring every version against a simple baseline is what showed the difference.
