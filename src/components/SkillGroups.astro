@@ -16,4 +16,10 @@ import { skillGroups } from '../data/profile';
   .group { padding: 22px; display: flex; flex-direction: column; gap: 0.6rem; }
   .group h3 { font-size: 1.02rem; }
   .group p { color: var(--muted); font-size: 0.9rem; flex: 1; }
+  .group .chips { padding-top: 0.5rem; }
+  /* Line up titles, descriptions and chips across each row of cards. */
+  @supports (grid-template-rows: subgrid) {
+    .group { display: grid; grid-row: span 3; grid-template-rows: subgrid; row-gap: 0.6rem; align-content: start; }
+    .group .chips { align-self: start; }
+  }
 </style>
